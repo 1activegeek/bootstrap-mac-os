@@ -1,0 +1,10 @@
+- hosts: localhost
+  connection: local
+  become: true
+
+  # pre_tasks:
+
+  tasks:
+    - include: tasks/homebrew.yml
+    - include: tasks/mas.yml
+    # - include: tasks/osx_defaults.yml

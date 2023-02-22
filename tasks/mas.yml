@@ -1,0 +1,23 @@
+# Reference for module: https://docs.ansible.com/ansible/latest/collections/community/general/mas_module.html#ansible-collections-community-general-mas-module
+- name: Install Mac App Store apps and upgrade all others
+  community.general.mas:
+    id:
+      - 1546729687  # Auto HD FPS for YouTube
+      - 425264550   # Disk Speed Test
+      - 1463298887  # Userscripts
+      - 1142151959  # Just Focus
+      - 419330170   # Moom
+      - 1472777122  # PayPal Honey
+      - 1482454543  # Twitter
+      - 937984704   # Amphetamine
+      - 1569813296  # 1Password for Safari
+      - 497799835   # Xcode
+      - 1475387142  # Tailscale
+      - 1295203466  # Microsoft Remote Desktop
+      - 413969927   # AudioBookBinder
+      - 1482920575  # DuckDuckGo Privacy for Safari
+    state: present
+
+- name: Upgrade all installed Mac App Store apps
+  community.general.mas:
+    upgrade_all: true
