@@ -36,8 +36,6 @@ fi
 if ! command -v ansible >/dev/null; then
   fancy_echo "Installing Ansible ..."
   brew install ansible 
-	# Fix to get ansible recognized as binary in PATH by reloading ZSH
-	exec zsh
 else
   fancy_echo "Ansible already installed. Skipping."
 fi
@@ -55,4 +53,5 @@ fi
 
 # Run this from the same directory as this README file. 
 fancy_echo "Running ansible playbook ..."
-ansible-pull -U https://git.thegeekybits.com/shawnmix/bootstrap-mac-os.git
+# ansible-pull -U https://git.thegeekybits.com/shawnmix/bootstrap-mac-os.git
+ansible-playbook -K local.yml

@@ -1,0 +1,121 @@
+---
+# Setup macOS defaults to configure most of OS level configurations
+configure_osx: true
+
+
+# Set to 'true' to configure the Dock via dockutil.
+configure_dock: false
+dockitems_remove: []
+# - Launchpad
+# - TV
+# - Podcasts
+# - 'App Store'
+dockitems_persist: []
+# - name: "Sublime Text"
+#   path: "/Applications/Sublime Text.app/"
+#   pos: 5
+
+
+# Install dotfiles from designated repo
+configure_dotfiles: false
+dotfiles_repo: https://github.com/geerlingguy/dotfiles.git
+dotfiles_repo_accept_hostkey: true
+dotfiles_repo_local_destination: ~/Development/GitHub/dotfiles
+dotfiles_files:
+  - .zshrc
+  - .osx
+  - .gitignore
+
+
+# Install core homebrew packages (formulae)
+configure_homebrew: false
+homebrew_packages:
+  # look back into packages from geerlingguy original
+  - awscli
+  - helm
+  - kubernetes-cli
+  - neofetch
+  - switchaudio-osx
+  - terraform
+  # these are at the end to avoid popups during installs
+  - mas
+  # Install cask apps, most of the usual apps to be installed here
+homebrew_cask_apps:
+  - 1password
+  - 1password-cli
+  - alfred
+  - android-file-transfer
+  # - ansible # listing here for reference, but should be installed in bootstrap.sh
+  - appcleaner
+  - balenaetcher
+  - blender
+  - cyberduck
+  - dash
+  - discord
+  - disk-inventory-x
+  - docker
+  - hpedrorodrigues/tools/dockutil
+  - drawio
+  - firefox
+  - google-chrome
+  - handbrake
+  - home-assistant
+  - icanhazshortcut
+  - keka
+  - keybase
+  - knockknock
+  - licecap
+  - mactracker
+  - microsoft-teams
+  - mullvadvpn
+  - obs
+  - obsidian
+  - openscad
+  - pgadmin4
+  - postman
+  - powershell
+  - prusaslicer
+  - raycast
+  - rocket-chat
+  - sequel-ace
+  - session-manager-plugin
+  - shottr
+  - shuttle
+  - slack
+  - subler
+  - suspicious-package
+  - taskexplorer
+  - teamviewer
+  - the-unarchiver
+  - tor-browser
+  - utm
+  - vanilla
+  - virtualbox
+  - visual-studio-code
+  - vlc
+  - wireshark
+  - zoom
+  # these are at the end to avoid popups during installs
+  - lulu
+  - blockblock
+
+
+# Install Mac App Store apps
+configure_mas: false
+mas_apps:
+  # Safari plugins
+  - 1569813296  # 1Password for Safari
+  - 1546729687  # Auto HD FPS for YouTube
+  - 1482920575  # DuckDuckGo Privacy for Safari
+  - 1472777122  # PayPal Honey
+  - 1463298887  # Userscripts
+  # macOS Apps
+  - 937984704   # Amphetamine
+  - 413969927   # AudioBookBinder
+  - 425264550   # Disk Speed Test
+  - 1142151959  # Just Focus
+  - 1295203466  # Microsoft Remote Desktop
+  - 419330170   # Moom
+  - 1475387142  # Tailscale
+  - 1482454543  # Twitter
+  - 497799835   # Xcode

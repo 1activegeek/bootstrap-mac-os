@@ -1,10 +1,50 @@
-- hosts: localhost
+- name: Configure macOS Host
+  hosts: localhost
   connection: local
-  become: true
 
-  # pre_tasks:
+  vars_files:
+    - config.yml
+
+  # vars_prompt:
+  #   - name: ansible_become_password
+  #     prompt: Please enter your user password for sudo escalations
+  #     private: true
+  #     confirm: true
+  #     unsafe: true
+
+  # roles:
+  #   - role: geerlingguy.mac.homebrew
+  #     tags: ['homebrew']
+  #   - role: geerlingguy.mac.mas
+  #     when: mas_installed_apps or mas_installed_app_ids
+  #     tags: ['mas']
+  #   - role: geerlingguy.dotfiles
+  #     when: configure_dotfiles
+  #     tags: ['dotfiles']
+  #   - role: geerlingguy.mac.dock
+  #     when: configure_dock
+  #     tags: ['dock']
 
   tasks:
-    - include: tasks/homebrew.yml
-    - include: tasks/mas.yml
-    # - include: tasks/osx_defaults.yml
+    - import_tasks: tasks/homebrew.yml
+      when: configure_homebrew
+      tags: ['homebrew']
+    - import_tasks: tasks/mas.yml
+      when: configure_mas
+      tags: ['mas']
+    - import_tasks: tasks/osx_defaults.yml
+      when: configure_osx
+      tags: ['osx']
+  
+  handlers:
+    # HHandler for killing dock from OSX Defaults changes touching dock
+  - name: Kill dock
+    shell: killall Dock
+    changed_when: false
+  - name: Kill Safari
+    shell: killall Safari
+
+  post_tasks:
+  # TODO Add manual intervention for apps that need to be opened for example or launched
+    - import_tasks: tasks/updates.yml
+      tags: ['update','post']

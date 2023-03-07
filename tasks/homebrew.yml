@@ -1,77 +1,23 @@
+---
 # Reference for module: https://docs.ansible.com/ansible/latest/collections/community/general/homebrew_module.html#examples
 
+# Update Homebrew on every run to ensure it's up to date
 - name: Update homebrew
-  community.general.homebrew:
+  homebrew:
     update_homebrew: true
 
-- name: Install Homebrew apps
-  community.general.homebrew:
-    name:
-      - 1password
-      - 1password-cli
-      - alfred
-      - android-file-transfer
-      # - ansible # listing here for reference, but should be installed in bootstrap.sh
-      - appcleaner
-      - awscli # formulae
-      - balenaetcher
-      - blender
-      - cyberduck
-      - dash
-      - discord
-      - disk-inventory-x
-      - docker
-      - drawio
-      - firefox
-      - google-chrome
-      - handbrake
-      - helm # formulae
-      - home-assistant
-      - icanhazshortcut
-      - keka
-      - keybase
-      - knockknock
-      - kubernetes-cli # formulae
-      - licecap
-      - mactracker
-      - microsoft-teams
-      - mullvadvpn
-      - neofetch
-      - obs
-      - obsidian
-      - openscad
-      - pgadmin4
-      - postman
-      - powershell
-      - prusaslicer
-      - raycast
-      - rocket-chat
-      - sequel-ace
-      - session-manager-plugin
-      - shottr
-      - shuttle
-      - slack
-      - switchaudio-osx # formulae
-      - subler
-      - suspicious-package
-      - taskexplorer
-      - teamviewer
-      - terraform # formulae
-      - the-unarchiver
-      - tor-browser
-      - utm
-      - vanilla
-      - virtualbox
-      - visual-studio-code
-      - vlc
-      - wireshark
-      - zoom
-      # these are at the end to avoid popups during installs
-      - mas # formulae
-      - lulu
-      - blockblock
+# Install the packages that are core formulae vs casks - iterating through each in a loop to see status
+- name: Install Homebrew packages
+  homebrew:
+    name: "{{ item.name | default(item) }}"
     state: present
+  loop: "{{ homebrew_packages }}"
 
-- name: Upgrade all Homebrew apps
-  community.general.homebrew:
-    upgrade_all: true
+# Install the casks apps
+- name: Install Homebrew casks
+  homebrew_cask:
+    name: "{{ item.name | default(item) }}"
+    state: present
+    sudo_password: "{{ ansible_become_password | default(omit) }}"
+  loop: "{{ homebrew_cask_apps }}"
+  ignore_errors: true
