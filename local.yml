@@ -6,14 +6,15 @@
     - config.yml
 
   vars_prompt:
+    - name: user_account
+      prompt: Please enter your user account name so we can insert the home directory
+      private: false
     - name: ansible_become_password
       prompt: Please enter your user password for sudo escalations
       private: true
       confirm: true
       unsafe: true
-    - name: user_account
-      prompt: Please enter your user account name so we can insert the home directory
-      private: false
+
 
   # roles:
   #   - role: geerlingguy.mac.homebrew

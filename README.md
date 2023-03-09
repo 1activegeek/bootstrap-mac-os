@@ -3,12 +3,17 @@
 # New Mac bootstrap repo
 This repo is intended to be used to bootstrap a brand new macOS installation. Unfortunately it will still require some manual steps which we'll outline below to handle first. Once these steps are done the rest of the process should be automatic. 
 ## Steps to get started:
-- [ ] Boot your macOS device, and complete the welcome wizard screens, including creating your User account and linking your AppleID
-- [ ] Sign into your user, and open the App Store app and validate that you are successfully signed in to your account. If not, sign in now so that Mas apps can be installed properly
-- [ ] Setup/Signin to your syncing app of choice which may host your configs. I use iCloud, and so need to be sure my AppleID is signed in, and that my documents have successfully downloaded on the device before running this script. Alternatively if your app of choice allows optimizing or syncinc specific files first - invoke this method to make this process quicker so that your dependent files will be available. 
-- [ ] Optional (but Recommended) - Fork this repository and customize the config.yml file so that you can customize it to your specific needs. Additionally, if you would like to set different OSX Defaults, see the directions below on how to quickly identify some of these configs
-- [ ] Run the following bootstrap command - **this will pull down a copy and run the script on your device**  
+1. Boot your macOS device, and complete the welcome wizard screens, including creating your User account and linking your AppleID
+2. Sign into your user, and open the App Store app and validate that you are successfully signed in to your account. If not, sign in now so that Mas apps can be installed properly
+3. Setup/Signin to your syncing app of choice which may host your configs. I use iCloud, and so need to be sure my AppleID is signed in, and that my documents have successfully downloaded on the device before running this script. Alternatively if your app of choice allows optimizing or syncinc specific files first - invoke this method to make this process quicker so that your dependent files will be available. 
+4. Optional (but Recommended) - Fork this repository and customize the config.yml file so that you can customize it to your specific needs. Additionally, if you would like to set different OSX Defaults, see the directions below on how to quickly identify some of these configs
+5. Run the following bootstrap command - **this will pull down a copy and run the script on your device**  
 `/bin/bash -c "$(curl -fsSL https://git.thegeekybits.com/shawnmix/bootstrap-mac-os/raw/branch/master/bootstrap.sh)"`
+6. Password prompt will appear to install XCode Command Line tools
+7. Once this completes and Homebrew completes installation, the Ansible playbook will kickoff
+8. You will need to enter your root password 3 times - once for sudo permissions to be enabled, and 2 extra times to provide the Sudo permissions for later iterations in the playbook
+9. One of the first playbooks to run will be the Homebrew playbook - it's not unusual for the first run of this to take quite some time for the Homebrew update command to complete
+10. 
 
 
 
