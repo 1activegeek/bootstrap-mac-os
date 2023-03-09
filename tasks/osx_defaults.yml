@@ -1,41 +1,25 @@
 ---
+# Reference for Module: https://docs.ansible.com/ansible/latest/collections/community/general/osx_defaults_module.html#ansible-collections-community-general-osx-defaults-module
+
 ## Dock
-# - name: Set dock tile size
-#   osx_defaults:
-#     domain: com.apple.dock
-#     key: tilesize
-#     type: float
-#     value: 60
-#     state: present
-#   notify:
-#   - Kill dock
-# - name: Set dock magnification size
-#   osx_defaults:
-#     domain: com.apple.dock
-#     key: largesize
-#     type: float
-#     value: 80
-#     state: present
-#   notify:
-#   - Kill dock
-# - name: Dock position
-#   osx_defaults:
-#     domain: com.apple.dock
-#     key: orientation
-#     type: string
-#     value: bottom
-#     state: present
-#   notify:
-#   - Kill dock
-# - name: Minimize window effect
-#   osx_defaults:
-#     domain: com.apple.dock
-#     key: mineffect
-#     type: string
-#     value: genie
-#     state: present
-#   notify:
-#   - Kill dock
+- name: Set dock tile size
+  osx_defaults:
+    domain: com.apple.dock
+    key: tilesize
+    type: float
+    value: 60
+    state: present
+  notify:
+  - Kill dock
+- name: Set dock magnification size
+  osx_defaults:
+    domain: com.apple.dock
+    key: largesize
+    type: float
+    value: 80
+    state: present
+  notify:
+  - Kill dock
 - name: Minimize windows into application icon
   osx_defaults:
     domain: com.apple.dock
@@ -54,24 +38,6 @@
     state: present
   notify:
   - Kill dock
-# - name: Animate opening applications
-#   osx_defaults:
-#     domain: com.apple.dock
-#     key: launchaim
-#     type: bool
-#     value: true
-#     state: present
-#   notify:
-#   - Kill dock
-# - name: Show indicators for open applications
-#   osx_defaults:
-#     domain: com.apple.dock
-#     key: show-process-indicators
-#     type: bool
-#     value: true
-#     state: present
-#   notify:
-#   - Kill dock
 - name: Show recent applications in Dock
   osx_defaults:
     domain: com.apple.dock
@@ -81,15 +47,15 @@
     state: present
   notify:
   - Kill dock
-# - name: Rearrange spaces based on use
-#   osx_defaults:
-#     domain: com.apple.dock
-#     key: mru-spaces
-#     type: bool
-#     value: true
-#     state: present
-#   notify:
-#   - Kill dock
+- name: Rearrange spaces based on use
+  osx_defaults:
+    domain: com.apple.dock
+    key: mru-spaces
+    type: bool
+    value: true
+    state: present
+  notify:
+  - Kill dock
 ## Trackpad
 - name: Turn off Natural Scrolling
   osx_defaults:
@@ -104,7 +70,7 @@
     type: int
     value: 1
     state: present
-- name: Disable Perfer Nicknames on Contacts
+- name: Disable Prefer Nicknames on Contacts
   osx_defaults:
     key: NSPersonNameDefaultShouldPreferNicknamesPreference
     type: int
@@ -120,7 +86,79 @@
     state: present
   notify:
   - Kill Safari
-
+## Finder
+- name: Show Internal Hard Drives on Desktop
+  osx_defaults:
+    domain: com.apple.finder
+    key: ShowHardDrivesOnDesktop
+    type: bool
+    value: true
+    state: present
+  notify:
+  - Kill Finder
+- name: Show Finder Status Bar
+  osx_defaults:
+    domain: com.apple.finder
+    key: ShowStatusBar
+    type: bool
+    value: true
+    state: present
+  notify:
+  - Kill Finder
+- name: Set default Finder new window location
+  osx_defaults:
+      domain: com.apple.finder
+      key: NewWindowTarget
+      type: string
+      value: PfLo
+      state: present
+  notify:
+  - Kill Finder
+####### NEED TO FIX THIS TO ADJUST USING HOME DIRECTORY OF USER #########
+- name: Set default Finder new window location Folder
+  osx_defaults:
+      domain: com.apple.finder
+      key: NewWindowTargetPath
+      type: string
+      value: file:///Users/{{ user_account }}/Downloads
+      state: present
+  notify:
+  - Kill Finder
+- name: Set default search scope to Current Folder
+  osx_defaults:
+      domain: com.apple.finder
+      key: FXDefaultSearchScope
+      type: string
+      value: SCcf
+      state: present
+  notify:
+  - Kill Finder
+- name: Remove items from Trash after 30 days
+  osx_defaults:
+      domain: com.apple.finder
+      key: FXRemoveOldTrashItems
+      type: bool
+      value: true
+      state: present
+  notify:
+  - Kill Finder
+- name: Keep folders on top in Windows when sorting
+  osx_defaults:
+      domain: com.apple.finder
+      key: "_FXSortFoldersFirst"
+      type: bool
+      value: true
+      state: present
+  notify:
+  - Kill Finder
+## Audio
+- name: Play feedback when adjusting volume
+  osx_defaults:
+      domain: NSGlobalDomain
+      key: com.apple.sound.beep.feedback
+      type: bool
+      value: true
+      state: present
 
 
 # - osx_defaults:
@@ -131,79 +169,3 @@
 #     state: present
 #   become: true
 
-# Use this for launch on login apps
-# defaults write com.knollsoft.Rectangle launchOnLogin -bool true
-
-# # Set hostname at command line
-# sudo scutil --set HostName daedalus
-# involve a prompt to ask for a hostname to set
-
-# - Finder defaults
-#   - show on desktop - hard drives, external disks, connected servers, Downlaods default tab
-#   - sidebar: dekstop, documents, downloads, home, icloud drive, machine, hard disks, external disks, bojour, connected servers
-#   - remove from trash after 30 days
-#   - when searching, use current folder
-#   - view options - always open in list, browse in list, use as defaults
-#  - Enable iMessages in cloud / keep convo after close
-#  - Start new conversations from shawnmix@gmail.com - iMessage / Facetime
-#  - show battery percentage `defaults write com.apple.menuextra.battery ShowPercent YES`
-#  - safari
-#   - open last tabs
-#   - dont open safe files after downloading
-#   - show website icon in tabs
-#  - show volume in menu bar
-#   - `defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.volume" '1'`
-#   - `defaults write com.apple.systemuiserver menuExtras -array-add "/System/Library/CoreServices/Menu Extras/Volume.menu"`
-#  - play feedback when adjusting volume - `defaults write -g com.apple.sound.beep.feedback -bool true`
-#  - Set app bar to correct order
-#  - Keep folders on top - in windows when sorting by name / desktop
-#  - Dont write ds_store files on network shares 'defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true'
-#  - Mail Prefs
-#    - most recent at top
-#    - load remote content false
-#    - setup signature
-# - Network
-#    - Setup new location (bypass / tunnel)
-#    - configure DNS appropriately for locations
-#    - turn on network sharing
-#    - turn on screen sharing
-#    - turn on file sharing
-
-# Low level stuff - likely copy across
-# - move over .ssh configs
-# - setup git identity
-
-# Extras that need manual intervention, or find way to script:
-# - Set appcleaner to automatic mode
-# - Hide block block from menu bar
-# - launch rectangle and configure (F and C for full and center) and launch at login
-# - launch auth and config
-#  - amphetamine
-#  - cheatsheet
-#  - docker
-#  - skitch - helper
-#  - itunes - authorize computer for Music 
-# - install creative cloud and install apps
-# - run adobe CC hack
-# - install Final Cut Pro cracked
-# - bitbar - chmod+x on script in appdata/bitbar
-# - turn off iCloud calendar
-# - turn off iCloud mail
-# - turn on firewall
-# - turn on unlock with apple watch
-# - add in gmail account for contacts/cal/mail
-# - open up mail, calendar, contacts for sync to happen
-# - setup google drive sync for Alfred settings
-# - alfred license file
-# - launch backup and sync - login
-# - todoist - remove from menu bar
-# - discord login / launch at startup
-# - pair krypton
-# - enable 3rd party apps in 1Password
-# - enable 1Password in Alfred
-# - enable nightshift for display
-# - Wireguard profiles
-
-
-# #### To find new defaults, 'defaults read > a, make change, defaults read > b, diff a b'
-# alias - da, db, ddif - create file a, file b, then dif

@@ -1,0 +1,63 @@
+---
+# Checking to see if the mackup config file exists
+- name: Check for mackup config file
+  stat:
+    path: ~/.mackup.cfg
+  register: stat_result
+# If it doesn't exist, copy it over from the repo content
+- name: Placing mackup config file in Home directory
+  command: cp ./mackup.cfg ~/mackup.cfg
+  when: not stat_result.stat.exists
+# Running mackup restore function to restore configurations
+- name: Running mackup restore function
+  command: mackup restore
+
+
+## Mackup Apps
+
+  # - Microsoft Remote Desktop
+  # - Moom
+  # - XCode
+  # - awscli
+  # - kubectl
+  # - neofetch
+  # - 1password
+  # - appcleaner
+  # - blender
+  # - cyberduck
+  # - dash
+  # - docker
+  # - handbrake
+  # - keka
+  # - keybase
+  # - obs
+  # - prusaslicer
+  # - raycast
+  # - shuttle
+  # - visual-studio-code
+  # - vlc
+  # - wireshark
+
+## Apps to Get Backups
+# Homebrew
+# - helm
+# - terraform
+# - discord
+# - icanhazshortcut
+# - knockknock
+# - mullvadvpn
+# - obsidian
+# - postman
+# - powershell
+# - shottr
+# - slack
+# - teamviewer
+# - vanilla
+# - zoom
+# - lulu
+# - blockblock
+
+# MAS
+# - Amphetamine
+# - Tailscale
+# - Twitter

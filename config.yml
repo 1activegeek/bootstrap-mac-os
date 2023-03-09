@@ -3,6 +3,10 @@
 configure_osx: true
 
 
+# Set to true to run mackup tasks for preferences and settings backup/restore
+configure_mackup: true
+
+
 # Set to 'true' to configure the Dock via dockutil.
 configure_dock: false
 dockitems_remove: []
@@ -28,12 +32,13 @@ dotfiles_files:
 
 
 # Install core homebrew packages (formulae)
-configure_homebrew: false
+configure_homebrew: true
 homebrew_packages:
   # look back into packages from geerlingguy original
   - awscli
   - helm
   - kubernetes-cli
+  - mackup
   - neofetch
   - switchaudio-osx
   - terraform
@@ -101,7 +106,7 @@ homebrew_cask_apps:
 
 
 # Install Mac App Store apps
-configure_mas: false
+configure_mas: true
 mas_apps:
   # Safari plugins
   - 1569813296  # 1Password for Safari

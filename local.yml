@@ -5,12 +5,15 @@
   vars_files:
     - config.yml
 
-  # vars_prompt:
+  vars_prompt:
   #   - name: ansible_become_password
   #     prompt: Please enter your user password for sudo escalations
   #     private: true
   #     confirm: true
   #     unsafe: true
+    - name: user_account
+      prompt: Please enter your user account name so we can insert the home directory
+      private: false
 
   # roles:
   #   - role: geerlingguy.mac.homebrew
@@ -35,14 +38,23 @@
     - import_tasks: tasks/osx_defaults.yml
       when: configure_osx
       tags: ['osx']
+    - import_tasks: tasks/mackup.yml
+      when: configure_mackup
+      tags: ['mackup']
   
   handlers:
-    # HHandler for killing dock from OSX Defaults changes touching dock
+    # Handler for killing Dock from OSX Defaults changes to Dock
   - name: Kill dock
     shell: killall Dock
     changed_when: false
+    # Handler for killing Safari from OSX Defaults changes to Safari
   - name: Kill Safari
     shell: killall Safari
+    changed_when: false
+    # Handler for killing Finder from OSX Defaults changes to Finder
+  - name: Kill Finder
+    shell: killall Finder
+    changed_when: false
 
   post_tasks:
   # TODO Add manual intervention for apps that need to be opened for example or launched
