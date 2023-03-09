@@ -2,6 +2,7 @@
 # Setup macOS defaults to configure most of OS level configurations
 configure_osx: true
 
+user_account: shawn
 
 # Set to true to run mackup tasks for preferences and settings backup/restore
 configure_mackup: false
