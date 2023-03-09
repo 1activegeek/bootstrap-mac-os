@@ -24,8 +24,8 @@ if ! command -v brew >/dev/null; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"# </dev/null # Removing this as it caused an error
   # Add Brew to PATH
 	fancy_echo "Adding Homebrew 'brew' to your PATH"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 	(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/"$(whoami)"/.zprofile
-	eval "$(/opt/homebrew/bin/brew shellenv)"
 	# Disable Gatekeeper checks on Brew apps
 	export HOMEBREW_CASK_OPTS="--no-quarantine"
 else
@@ -40,18 +40,19 @@ else
   fancy_echo "Ansible already installed. Skipping."
 fi
 
-# # Clone the repository to your local drive.
-# if [ -d "./laptop" ]; then
-#   fancy_echo "Laptop repo dir exists. Removing ..."
-#   rm -rf ./laptop/
-# fi
-# fancy_echo "Cloning laptop repo ..."
-# git clone https://github.com/siyelo/laptop.git 
+# Clone the repository to your local drive.
+fancy_echo "Checking for bootstrap dir ..."
+if [ -d "~/.bootstrap" ]; then
+  fancy_echo "Bootstrap repo dir exists. Removing ..."
+  rm -rf ~/.bootstrap/
+fi
+fancy_echo "Cloning bootstrap repo ..."
+git clone https://git.thegeekybits.com/shawnmix/bootstrap-mac-os.git ~/.bootstrap
 
-# fancy_echo "Changing to laptop repo dir ..."
-# cd laptop
+fancy_echo "Changing to bootstrap repo dir ..."
+cd ~/.bootstrap
 
 # Run this from the same directory as this README file. 
 fancy_echo "Running ansible playbook ..."
-ansible-pull -K -U https://git.thegeekybits.com/shawnmix/bootstrap-mac-os.git
-# ansible-playbook -K local.yml
+# ansible-pull -U https://git.thegeekybits.com/shawnmix/bootstrap-mac-os.git
+ansible-playbook local.yml
