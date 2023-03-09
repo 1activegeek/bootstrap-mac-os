@@ -53,5 +53,5 @@ fi
 
 # Run this from the same directory as this README file. 
 fancy_echo "Running ansible playbook ..."
-# ansible-pull -U https://git.thegeekybits.com/shawnmix/bootstrap-mac-os.git
-ansible-playbook -K local.yml
+ansible-pull -U https://git.thegeekybits.com/shawnmix/bootstrap-mac-os.git
+# ansible-playbook -K local.yml
