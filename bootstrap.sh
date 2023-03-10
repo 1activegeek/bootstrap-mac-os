@@ -21,7 +21,7 @@ set -e
 
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew..."
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"# </dev/null # Removing this as it caused an error
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"# </dev/null # Removing this as it caused an error
   # Add Brew to PATH
 	fancy_echo "Adding Homebrew 'brew' to your PATH"
   eval "$(/opt/homebrew/bin/brew shellenv)"
