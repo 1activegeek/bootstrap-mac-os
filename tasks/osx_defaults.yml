@@ -156,8 +156,8 @@
   osx_defaults:
       domain: NSGlobalDomain
       key: com.apple.sound.beep.feedback
-      type: bool
-      value: true
+      type: int
+      value: 1
       state: present
 
 

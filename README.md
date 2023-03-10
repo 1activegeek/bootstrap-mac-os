@@ -16,11 +16,23 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 10. 
 
 
-
-
-
-
 <!--
+
+## Apps to launch after completion
+- Contacts
+- Mail
+- Calendar
+- Reminders
+- Messages
+- Safari
+- Notes
+- Obsidian
+- 1Password
+- Moom
+- Raycast
+- Shortcuts
+- Discord
+- BlockBlock
 
 ## Mackup handle?
 - Set appcleaner to automatic mode
@@ -42,9 +54,7 @@ involve a prompt to ask for a hostname to set
   - open last tabs
   - dont open safe files after downloading
   - show website icon in tabs
- - show volume in menu bar
  - Set app bar to correct order
- - Keep folders on top - in windows when sorting by name / desktop
  - Dont write ds_store files on network shares 'defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true'
  - Mail Prefs
    - most recent at top
