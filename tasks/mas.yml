@@ -2,5 +2,6 @@
 
 - name: Install Mac App Store apps
   mas:
-    id: "{{ mas_apps }}"
+    id: "{{ item.name | default(item) }}"
     state: present
+  loop: "{{ mas_apps }}"

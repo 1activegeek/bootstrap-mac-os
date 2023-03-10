@@ -6,7 +6,7 @@
   register: stat_result
 # If it doesn't exist, set its content to use iCloud and set destination folder
 - name: Creating mackup config file
-  command: echo "[storage]" > ~/.mackup.cfg && echo "engine = icloud" >> ~/.mackup.cfg && echo "directory = mackup" >> ~/.mackup.cfg
+  shell: echo "[storage]" > ~/.mackup.cfg && echo "engine = icloud" >> ~/.mackup.cfg && echo "directory = mackup" >> ~/.mackup.cfg
   when: not stat_result.stat.exists
 # # If it doesn't exist, copy it over from the repo content
 # - name: Placing mackup config file in Home directory
@@ -14,7 +14,7 @@
 #   when: not stat_result.stat.exists
 # Running mackup restore function to restore configurations
 - name: Running mackup restore function
-  command: mackup restore
+  command: mackup restore -y
 
 
 ## Mackup Apps
