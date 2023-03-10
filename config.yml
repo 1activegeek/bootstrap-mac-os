@@ -1,8 +1,8 @@
 ---
 # Setup macOS defaults to configure most of OS level configurations
 configure_osx: true
-# User account to use for OSX Defaults setting (temporary, need to fix this)
-user_account: shawnmix
+# # User account to use for OSX Defaults setting (temporary, need to fix this)
+# user_account: 
 
 
 # Set to true to run mackup tasks for preferences and settings backup/restore

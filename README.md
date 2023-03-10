@@ -13,83 +13,71 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 7. Once this completes and Homebrew completes installation, the Ansible playbook will kickoff
 8. You will need to enter your root password 3 times - once for sudo permissions to be enabled, and 2 extra times to provide the Sudo permissions for later iterations in the playbook
 9. One of the first playbooks to run will be the Homebrew playbook - it's not unusual for the first run of this to take quite some time for the Homebrew update command to complete
-10. 
 
 
-<!--
 
-## Apps to launch after completion
-- Contacts
-- Mail
-- Calendar
-- Reminders
-- Messages
-- Safari
-- Notes
-- Obsidian
-- 1Password
-- Moom
-- Raycast
-- Shortcuts
-- Discord
-- BlockBlock
-
-## Mackup handle?
-- Set appcleaner to automatic mode
-
-#### Set hostname at command line
-sudo scutil --set HostName daedalus
-involve a prompt to ask for a hostname to set
-
-#### Low level stuff - likely copy across
-- move over .ssh configs
-- setup git identity
-
-#### Finder defaults
-  - sidebar: dekstop, documents, downloads, home, icloud drive, machine, hard disks, external disks, bojour, connected servers
+## TODO:
+- Configure hostname at CLI - 'sudo scutil --set HostName daedalus'
+- Setup dock icons order
+- Remove unused apps (garageband)
+- Finder
+  - Configure sidebar of Finder (favorites, network, etc) dekstop, documents, downloads, home, icloud drive, machine, hard disks, external disks, bojour, connected servers
   - view options - always open in list, browse in list, use as defaults
- - Enable iMessages in cloud / keep convo after close
- - Start new conversations from shawnmix@gmail.com - iMessage / Facetime
- - safari
+- Safari
   - open last tabs
   - dont open safe files after downloading
   - show website icon in tabs
- - Set app bar to correct order
- - Dont write ds_store files on network shares 'defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true'
- - Mail Prefs
-   - most recent at top
-   - load remote content false
-   - setup signature
 - Network
-   - Setup new location (bypass / tunnel)
-   - configure DNS appropriately for locations
-   - turn on network sharing
-   - turn on screen sharing
-   - turn on file sharing
-
-#### Extras that need manual intervention, or find way to script:
-
-- Hide block block from menu bar
-- launch auth and config
- - amphetamine
- - docker
- - music - authorize computer for Music 
-- turn off iCloud calendar
-- turn off iCloud mail
-- turn on firewall
-- turn on unlock with apple watch
-- add in gmail account for contacts/cal/mail
-- open up mail, calendar, contacts for sync to happen
-- discord login / launch at startup
-- enable 3rd party apps in 1Password
-- enable 1Password in raycast
-- enable nightshift for display
-- Wireguard profiles
-
-
-#### Use this for launch on login apps
-defaults write com.knollsoft.Rectangle launchOnLogin -bool true
+  - Setup new location (bypass / tunnel)
+  - configure DNS appropriately for locations
+  - turn on network sharing
+  - turn on screen sharing
+  - turn on file sharing
+  - Dont write ds_store files on network shares 'defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true'
+- Mail Prefs
+  - most recent at top
+  - load remote content false
+  - setup signature
+- Messages
+  - Enable iMessages in cloud / keep convo after close
+  - Start new conversations from shawnmix@gmail.com - iMessage / Facetime
+- Setup git identity - covered by mackup? need validation
+- Set appcleaner to automatic mode - handled by mackup?
+- Move over .ssh configs - whats covered in mackup?
+- Launch apps after completion (for syncing purposes)
+  - Contacts
+  - Mail
+  - Calendar
+  - Reminders
+  - Messages
+  - Safari
+  - Notes
+  - Obsidian
+  - 1Password
+  - Moom
+  - Raycast
+  - Shortcuts
+  - Discord
+  - BlockBlock
+- Settings
+  - Hide block block from menu bar
+  - launch auth and config
+   - amphetamine
+   - docker
+   - music - authorize computer for Music 
+  - turn off iCloud calendar
+  - turn off iCloud mail
+  - turn on firewall
+  - turn on unlock with apple watch
+  - add in gmail account for contacts/cal/mail
+  - open up mail, calendar, contacts for sync to happen
+  - discord login / launch at startup
+  - enable 3rd party apps in 1Password
+  - enable 1Password in raycast
+  - enable nightshift for display
+  - Wireguard profiles
 
 #### To find new defaults, 'defaults read > a, make change, defaults read > b, diff a b'
 alias - da, db, ddif - create file a, file b, then dif
--->
+#### Use this for launch on login apps
+defaults write com.knollsoft.Rectangle launchOnLogin -bool true
