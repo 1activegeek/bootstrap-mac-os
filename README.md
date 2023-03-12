@@ -17,9 +17,9 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 
 
 ## TODO:
+- Fix ansible and brew commands not recognized after bootstrap
 - Configure hostname at CLI - 'sudo scutil --set HostName daedalus'
 - Setup dock icons order
-- Remove unused apps (garageband)
 - Finder
   - Configure sidebar of Finder (favorites, network, etc) dekstop, documents, downloads, home, icloud drive, machine, hard disks, external disks, bojour, connected servers
   - view options - always open in list, browse in list, use as defaults

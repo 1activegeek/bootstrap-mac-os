@@ -18,20 +18,6 @@
       confirm: true
       unsafe: true
 
-
-  # roles:
-  #   - role: geerlingguy.mac.homebrew
-  #     tags: ['homebrew']
-  #   - role: geerlingguy.mac.mas
-  #     when: mas_installed_apps or mas_installed_app_ids
-  #     tags: ['mas']
-  #   - role: geerlingguy.dotfiles
-  #     when: configure_dotfiles
-  #     tags: ['dotfiles']
-  #   - role: geerlingguy.mac.dock
-  #     when: configure_dock
-  #     tags: ['dock']
-
   tasks:
     - import_tasks: tasks/homebrew.yml
       when: configure_homebrew
@@ -45,6 +31,9 @@
     - import_tasks: tasks/mackup.yml
       when: configure_mackup
       tags: ['mackup']
+    - import_tasks: tasks/dock.yml
+      when: configure_dock
+      tags: ['dock']
   
   handlers:
     # Handler for killing Dock from OSX Defaults changes to Dock

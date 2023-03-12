@@ -1,3 +1,28 @@
 ---
+# source: https://github.com/geerlingguy/ansible-collection-mac/blob/master/roles/dock/tasks/main.yml
 # https://github.com/kcrawford/dockutil
+# See: https://github.com/kcrawford/dockutil/issues/127
 
+- name: Install dockutil.
+  homebrew_cask:
+    name: hpedrorodrigues/tools/dockutil
+    state: present
+  tags: ['dock']
+
+- name: Remove configured Dock items.
+  include_tasks: tasks/dock-remove.yml
+  loop: "{{ dockitems_remove }}"
+  tags: ['dock']
+
+- name: Ensure required dock items exist.
+  include_tasks: tasks/dock-add.yml
+  loop: "{{ dockitems_persist }}"
+  tags: ['dock']
+
+- name: Ensure dock items are in correct position.
+  include_tasks: tasks/dock-position.yml
+  when:
+    - item.pos is defined
+    - item.pos > 0
+  loop: "{{ dockitems_persist }}"
+  tags: ['dock']

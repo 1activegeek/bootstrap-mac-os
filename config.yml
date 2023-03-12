@@ -1,8 +1,6 @@
 ---
 # Setup macOS defaults to configure most of OS level configurations
 configure_osx: true
-# # User account to use for OSX Defaults setting (temporary, need to fix this)
-# user_account: 
 
 
 # Set to true to run mackup tasks for preferences and settings backup/restore
@@ -10,17 +8,66 @@ configure_mackup: true
 
 
 # Set to 'true' to configure the Dock via dockutil.
-configure_dock: false
-dockitems_remove: []
-# - Launchpad
-# - TV
-# - Podcasts
-# - 'App Store'
-dockitems_persist: []
-# - name: "Sublime Text"
-#   path: "/Applications/Sublime Text.app/"
-#   pos: 5
-
+configure_dock: true
+dockitems_remove:
+- Launchpad
+- Maps
+- FaceTime
+- Contacts
+- Freeform
+- TV
+- News
+- 'App Store'
+- 'System Settings'
+dockitems_persist:
+- name: "Music"
+  path: "/System/Applications/Music.app/"
+  pos: 1
+- name: "Photos"
+  path: "/System/Applications/Photos.app/"
+  pos: 2
+- name: "Shortcuts"
+  path: "/System/Applications/Shortcuts.app/"
+  pos: 3
+- name: "Safari"
+  path: "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/"
+  pos: 4
+- name: "Google Chrome"
+  path: "/Applications/Google Chrome.app/"
+  pos: 5
+- name: "Mail"
+  path: "/System/Applications/Mail.app/"
+  pos: 6
+- name: "Calendar"
+  path: "/System/Applications/Calendar.app/"
+  pos: 7
+- name: "Zoom"
+  path: "/Applications/zoom.us.app/"
+  pos: 8
+- name: "Slack"
+  path: "/Applications/Slack.app/"
+  pos: 9
+- name: "Discord"
+  path: "/Applications/Discord.app/"
+  pos: 10
+- name: "Messages"
+  path: "/System/Applications/Messages.app/"
+  pos: 11
+- name: "Reminders"
+  path: "/System/Applications/Reminders.app/"
+  pos: 12
+- name: "Notes"
+  path: "/System/Applications/Notes.app/"
+  pos: 13
+- name: "Obsidian"
+  path: "/Applications/Obsidian.app/"
+  pos: 14
+- name: "Visual Studio Code"
+  path: "/Applications/Visual Studio Code.app/"
+  pos: 15
+- name: "Terminal"
+  path: "/System/Applications/Utilities/Terminal.app/"
+  pos: 16
 
 # Install dotfiles from designated repo
 configure_dotfiles: false
@@ -61,6 +108,7 @@ homebrew_cask_apps:
   - discord
   - disk-inventory-x
   - docker
+  - dockutil
   - hpedrorodrigues/tools/dockutil
   - drawio
   - firefox

@@ -1,4 +1,6 @@
 ---
+# Reference for manual creation: https://github.com/lra/mackup/tree/master/doc#get-official-support-for-an-application
+
 # Checking to see if the mackup config file exists
 - name: Check for mackup config file
   stat:
@@ -18,7 +20,6 @@
 
 
 ## Mackup Apps
-
   # - Microsoft Remote Desktop
   # - Moom
   # - XCode
@@ -42,7 +43,7 @@
   # - vlc
   # - wireshark
 
-## Apps to Get Backups
+## Apps Needing Configs potentially
 # Homebrew
 # - helm
 # - terraform
