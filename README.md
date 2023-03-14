@@ -19,9 +19,37 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 - Move hostname and sudo permission prompts to an include only if running the selected playbooks that need it
 - Fix ansible and brew commands not recognized after bootstrap
 - Configure hostname at CLI - 'sudo scutil --set HostName daedalus'
+- Accounts
+  - Must add accounts from other devices now
+- General
+  - Language & Region
+    - First Day of week - Monday
+- Calendar
+  - Settings
+    - Advanced
+      - Turn on Time Zone Support
+      - show week numbers
+  - View
+    - Show declined events
 - Finder
+  - Set list view default for folders
   - Configure sidebar of Finder (favorites, network, etc) dekstop, documents, downloads, home, icloud drive, machine, hard disks, external disks, bojour, connected servers
   - view options - always open in list, browse in list, use as defaults
+  - Favorites
+    - AirDrop
+    - Recents
+    - shawnmix (homedir)
+    - Downloads
+  - iCloud
+    - iCloud Drive
+    - Downloads
+    - Documents
+    - Docs - Traceable
+    - 3DPrint
+    - House Documents
+    - 15 Murray St
+    - Shared
+    - Desktop
 - Safari
   - open last tabs
   - dont open safe files after downloading
@@ -37,6 +65,28 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
   - most recent at top
   - load remote content false
   - setup signature
+  - Favorites:
+    - All Inboxes
+    - Smart Mailbox - Inbox only, no work (may get rid of)
+    - Flagged
+    - Send Later
+    - Meeting Invites
+    - Account Work
+    - Team East
+    - Team SA
+    - Sales
+    - Product
+    - All Sent
+  - Settings
+    - Viewing
+      - Marks all messages as read when opening
+      - Show most recent messages at the top
+    - Composing
+      - Mark messages not ending with (@traceable.ai)
+      - Undo send delay - 20 secs
+    - Signatures
+      - Set to each account
+      - Choose default signatures for each account
 - Messages
   - Enable iMessages in cloud / keep convo after close
   - Start new conversations from shawnmix@gmail.com - iMessage / Facetime
@@ -79,13 +129,31 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 - Keyboard
   - Keyboard Navigation - allow navigate with keyboard using tab and shift+tab
   - Keyboard shortcuts - Spotlight - Option + Space
+- Trackpad
+  - Point and click
+    - tap to click 
+    - tracking speed one notch below fast
+  - More Gestures
+    - App Expose - swipe down with three fingers
 - Raycast - import settings from iCloud backup
   - option to script? Add to mackup? 
   - fix screenshots folder pointer
 - Visual Studio
   - Enable settings sync
   - overwrite local changes to resolve conflicting settings
-
+- Shottr
+  - General
+    - Window Screenshot - Trim Shadow
+    - Screenshot folder
+  - Advanced 
+    - Allow diagnostics collection
+- BlockBlock - hide icon mode
+- LuLu - hide icon mode
+- Slack
+  - Signin
+  - Theme
+- JustFocus - autostart on login
+- Time Machine
 
 
 #### To find new defaults, 'defaults read > a, make change, defaults read > b, diff a b'
