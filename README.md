@@ -40,7 +40,7 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 - Messages
   - Enable iMessages in cloud / keep convo after close
   - Start new conversations from shawnmix@gmail.com - iMessage / Facetime
-- Set appcleaner to automatic mode - handled by mackup?
+- Set appcleaner to automatic mode - need appcleaner preference backup to work properly, not working currently
 - Move over .ssh configs - whats covered in mackup?
 - Launch apps after completion (for syncing purposes)
   - Contacts
@@ -74,6 +74,19 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
   - enable 1Password in raycast
   - enable nightshift for display
   - Wireguard profiles
+- Siri & Spotlight
+  - allow Hey Siri
+- Keyboard
+  - Keyboard Navigation - allow navigate with keyboard using tab and shift+tab
+  - Keyboard shortcuts - Spotlight - Option + Space
+- Raycast - import settings from iCloud backup
+  - option to script? Add to mackup? 
+  - fix screenshots folder pointer
+- Visual Studio
+  - Enable settings sync
+  - overwrite local changes to resolve conflicting settings
+
+
 
 #### To find new defaults, 'defaults read > a, make change, defaults read > b, diff a b'
 alias - da, db, ddif - create file a, file b, then dif
