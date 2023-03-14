@@ -15,9 +15,8 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 9. One of the first playbooks to run will be the Homebrew playbook - it's not unusual for the first run of this to take quite some time for the Homebrew update command to complete
 
 
-
 ## TODO:
-- Test out restoring icons on new laptop
+- Move hostname and sudo permission prompts to an include only if running the selected playbooks that need it
 - Fix ansible and brew commands not recognized after bootstrap
 - Configure hostname at CLI - 'sudo scutil --set HostName daedalus'
 - Finder

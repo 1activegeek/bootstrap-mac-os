@@ -108,7 +108,6 @@ homebrew_cask_apps:
   - discord
   - disk-inventory-x
   - docker
-  - dockutil
   - hpedrorodrigues/tools/dockutil
   - drawio
   - firefox
