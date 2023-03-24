@@ -154,7 +154,19 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
   - Theme
 - JustFocus - autostart on login
 - Time Machine
+- Notifications - turn off email
+- Siri Suggestions
+  - Disable Calendar
+- Raycast
+  - Script Commands directories not loading
+  - Also need to sync .raycast directory
 
+# Set computer name (as done via System Preferences → Sharing)
+COMPUTER_NAME="0x6D746873"
+#sudo scutil --set ComputerName "${COMPUTER_NAME}"
+#sudo scutil --set HostName "${COMPUTER_NAME}"
+#sudo scutil --set LocalHostName "${COMPUTER_NAME}"
+#sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "${COMPUTER_NAME}"
 
 #### To find new defaults, 'defaults read > a, make change, defaults read > b, diff a b'
 alias - da, db, ddif - create file a, file b, then dif
