@@ -138,6 +138,8 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 - Raycast - import settings from iCloud backup
   - option to script? Add to mackup? 
   - fix screenshots folder pointer
+  - Script Commands directories not loading
+  - Also need to sync .raycast directory
 - Visual Studio
   - Enable settings sync
   - overwrite local changes to resolve conflicting settings
@@ -157,9 +159,6 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 - Notifications - turn off email
 - Siri Suggestions
   - Disable Calendar
-- Raycast
-  - Script Commands directories not loading
-  - Also need to sync .raycast directory
 
 # Set computer name (as done via System Preferences → Sharing)
 COMPUTER_NAME="0x6D746873"
