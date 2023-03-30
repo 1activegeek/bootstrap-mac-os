@@ -6,3 +6,4 @@
   ansible.builtin.hostname:
     name: "{{ new_hostname }}"
     use: macos
+  become: true
