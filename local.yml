@@ -9,7 +9,7 @@
     - name: user_account
       prompt: Please enter your user account name so we can insert the home directory
       private: false
-    - name: machine_name
+    - name: new_hostname
       prompt: Please enter your desired hostname for this machine
       private: false
     - name: ansible_become_password
@@ -19,37 +19,40 @@
       unsafe: true
 
   tasks:
-    - import_tasks: tasks/homebrew.yml
+    - ansible.builtin.import_tasks: tasks/hostname.yml
+      when: configure_hostname
+      tags: ['hostname']
+    - ansible.builtin.import_tasks: tasks/homebrew.yml
       when: configure_homebrew
       tags: ['homebrew']
-    - import_tasks: tasks/mas.yml
+    - ansible.builtin.import_tasks: tasks/mas.yml
       when: configure_mas
       tags: ['mas']
-    - import_tasks: tasks/osx_defaults.yml
+    - ansible.builtin.import_tasks: tasks/osx_defaults.yml
       when: configure_osx
       tags: ['osx']
-    - import_tasks: tasks/mackup.yml
+    - ansible.builtin.import_tasks: tasks/mackup.yml
       when: configure_mackup
       tags: ['mackup']
-    - import_tasks: tasks/dock.yml
+    - ansible.builtin.import_tasks: tasks/dock.yml
       when: configure_dock
       tags: ['dock']
-  
+
   handlers:
     # Handler for killing Dock from OSX Defaults changes to Dock
   - name: Kill dock
-    shell: killall Dock
+     ansible.builtin.shell: killall Dock
     changed_when: false
     # Handler for killing Safari from OSX Defaults changes to Safari
   - name: Kill Safari
-    shell: killall Safari
+     ansible.builtin.shell: killall Safari
     changed_when: false
     # Handler for killing Finder from OSX Defaults changes to Finder
   - name: Kill Finder
-    shell: killall Finder
+     ansible.builtin.shell: killall Finder
     changed_when: false
 
   post_tasks:
   # TODO Add manual intervention for apps that need to be opened for example or launched
-    - import_tasks: tasks/updates.yml
+    - ansible.builtin.import_tasks: tasks/updates.yml
       tags: ['update','post']

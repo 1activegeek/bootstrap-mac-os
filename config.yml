@@ -101,8 +101,10 @@ homebrew_cask_apps:
   - android-file-transfer
   # - ansible # listing here for reference, but should be installed in bootstrap.sh
   - appcleaner
+  - arc
   - balenaetcher
   - blender
+  - clickup
   - cyberduck
   - dash
   - discord
@@ -136,6 +138,7 @@ homebrew_cask_apps:
   - shottr
   - shuttle
   - slack
+  - stats
   - subler
   - suspicious-package
   - taskexplorer

@@ -159,6 +159,11 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 - Notifications - turn off email
 - Siri Suggestions
   - Disable Calendar
+- Office Installer - find way to script using the cracked installer
+- Zoom
+  - Set defaults for meeting to map to system audio output/input
+  - Setup keyboard shortcuts
+  - Setup video wiht blur, touch up, HD, low light, participant names on video at all times
 
 # Set computer name (as done via System Preferences → Sharing)
 COMPUTER_NAME="0x6D746873"
