@@ -41,15 +41,15 @@
   handlers:
     # Handler for killing Dock from OSX Defaults changes to Dock
   - name: Kill dock
-     ansible.builtin.shell: killall Dock
+    ansible.builtin.shell: killall Dock
     changed_when: false
     # Handler for killing Safari from OSX Defaults changes to Safari
   - name: Kill Safari
-     ansible.builtin.shell: killall Safari
+    ansible.builtin.shell: killall Safari
     changed_when: false
     # Handler for killing Finder from OSX Defaults changes to Finder
   - name: Kill Finder
-     ansible.builtin.shell: killall Finder
+    ansible.builtin.shell: killall Finder
     changed_when: false
 
   post_tasks:
