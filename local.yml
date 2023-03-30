@@ -9,9 +9,11 @@
     - name: user_account
       prompt: Please enter your user account name so we can insert the home directory
       private: false
+      tags: ['osx']
     - name: new_hostname
       prompt: Please enter your desired hostname for this machine
       private: false
+      tags: ['hostname']
     - name: ansible_become_password
       prompt: Please enter your user password for sudo escalations
       private: true
