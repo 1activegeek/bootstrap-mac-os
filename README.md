@@ -135,6 +135,7 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
     - tracking speed one notch below fast
   - More Gestures
     - App Expose - swipe down with three fingers
+  - get setup for trackpad or touchpad devices
 - Raycast - import settings from iCloud backup
   - option to script? Add to mackup? 
   - fix screenshots folder pointer
@@ -164,6 +165,7 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
   - Set defaults for meeting to map to system audio output/input
   - Setup keyboard shortcuts
   - Setup video wiht blur, touch up, HD, low light, participant names on video at all times
+- find a prusaslicer backup mechanism
 
 # Set computer name (as done via System Preferences → Sharing)
 COMPUTER_NAME="0x6D746873"
