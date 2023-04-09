@@ -84,6 +84,7 @@ dotfiles_files:
 configure_homebrew: true
 homebrew_packages:
   # look back into packages from geerlingguy original
+  - age
   - awscli
   - helm
   - kubernetes-cli
@@ -131,6 +132,7 @@ homebrew_cask_apps:
   - postman
   - powershell
   - prusaslicer
+  - raspberry-pi-imager
   - raycast
   - rocket-chat
   - sequel-ace
