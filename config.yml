@@ -157,6 +157,24 @@ homebrew_cask_apps:
   # these are at the end to avoid popups during installs
   - lulu
   - blockblock
+  # used for home-ops setup
+  - fluxcd/tap/flux
+  - weaveworks/tap/gitops
+  - go-task/tap/go-task
+  - direnv
+  - ipcalc
+  - jq
+  - kubectl
+  - pre-commit
+  - sops
+  - terraform
+  - helm
+  - kustomize
+  - stern
+  - yamllint
+
+
+
 
 # Install Mac App Store apps
 configure_mas: true
