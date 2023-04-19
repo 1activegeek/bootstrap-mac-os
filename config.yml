@@ -87,9 +87,13 @@ homebrew_packages:
   - age
   - awscli
   - helm
+  - k9s
+  - kube-ps1
+  - kubectx
   - kubernetes-cli
   - mackup
   - neofetch
+  - pygments
   - switchaudio-osx
   - terraform
   # these are at the end to avoid popups during installs
