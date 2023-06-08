@@ -105,6 +105,7 @@ homebrew_cask_apps:
   - alfred
   - android-file-transfer
   # - ansible # listing here for reference, but should be installed in bootstrap.sh
+  - altair-graphql-client
   - appcleaner
   - arc
   - balenaetcher
@@ -126,6 +127,7 @@ homebrew_cask_apps:
   - keybase
   - knockknock
   - licecap
+  - lunar
   - mactracker
   - microsoft-teams
   - mullvadvpn
