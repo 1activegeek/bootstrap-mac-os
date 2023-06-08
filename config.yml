@@ -8,6 +8,9 @@ configure_hostname: true
 # Set to true to run mackup tasks for preferences and settings backup/restore
 configure_mackup: true
 
+# Set to true to run ohmyzsh installation
+configure_ohmyzsh: true
+
 # Set to 'true' to configure the Dock via dockutil.
 configure_dock: true
 dockitems_remove:

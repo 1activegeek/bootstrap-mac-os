@@ -31,12 +31,15 @@
     - ansible.builtin.import_tasks: tasks/osx_defaults.yml
       when: configure_osx
       tags: ['osx']
-    - ansible.builtin.import_tasks: tasks/mackup.yml
-      when: configure_mackup
-      tags: ['mackup']
+    - ansible.builtin.import_tasks: tasks/ohmyzsh.yml
+      when: configure_ohmyzsh
+      tags: ['ohmyzsh']
     - ansible.builtin.import_tasks: tasks/dock.yml
       when: configure_dock
       tags: ['dock']
+    - ansible.builtin.import_tasks: tasks/mackup.yml
+      when: configure_mackup
+      tags: ['mackup']
 
   handlers:
     # Handler for killing Dock from OSX Defaults changes to Dock
