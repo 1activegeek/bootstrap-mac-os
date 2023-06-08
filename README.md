@@ -31,6 +31,7 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
       - show week numbers
   - View
     - Show declined events
+  - Start week On - map to Monday or change system setting
 - Finder
   - Set list view default for folders
   - Configure sidebar of Finder (favorites, network, etc) dekstop, documents, downloads, home, icloud drive, machine, hard disks, external disks, bojour, connected servers
@@ -90,6 +91,8 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 - Messages
   - Enable iMessages in cloud / keep convo after close
   - Start new conversations from shawnmix@gmail.com - iMessage / Facetime
+- Contacts
+  - Sort by first name
 - Set appcleaner to automatic mode - need appcleaner preference backup to work properly, not working currently
 - Move over .ssh configs - whats covered in mackup?
 - Launch apps after completion (for syncing purposes)
@@ -135,6 +138,7 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
     - tracking speed one notch below fast
   - More Gestures
     - App Expose - swipe down with three fingers
+  - get setup for trackpad or touchpad devices
 - Raycast - import settings from iCloud backup
   - option to script? Add to mackup? 
   - fix screenshots folder pointer
@@ -164,6 +168,7 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
   - Set defaults for meeting to map to system audio output/input
   - Setup keyboard shortcuts
   - Setup video wiht blur, touch up, HD, low light, participant names on video at all times
+- find a prusaslicer backup mechanism
 
 # Set computer name (as done via System Preferences → Sharing)
 COMPUTER_NAME="0x6D746873"
