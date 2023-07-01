@@ -169,6 +169,7 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
   - Setup keyboard shortcuts
   - Setup video wiht blur, touch up, HD, low light, participant names on video at all times
 - find a prusaslicer backup mechanism
+- Shortcuts App - Enable scripts
 
 # Set computer name (as done via System Preferences → Sharing)
 COMPUTER_NAME="0x6D746873"
