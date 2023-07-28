@@ -99,6 +99,21 @@ homebrew_packages:
   - pygments
   - switchaudio-osx
   - terraform
+  # used for home-ops setup
+  - fluxcd/tap/flux
+  - weaveworks/tap/gitops
+  - go-task/tap/go-task
+  - direnv
+  - ipcalc
+  - jq
+  - kubectl
+  - pre-commit
+  - sops
+  - terraform
+  - helm
+  - kustomize
+  - stern
+  - yamllint
   # these are at the end to avoid popups during installs
   - mas
   # Install cask apps, most of the usual apps to be installed here
@@ -158,7 +173,8 @@ homebrew_cask_apps:
   - tor-browser
   - utm
   - vanilla
-  - virtualbox
+  # - virtualbox
+  - virtualbox-beta
   - visual-studio-code
   - vlc
   - wireshark
@@ -166,22 +182,6 @@ homebrew_cask_apps:
   # these are at the end to avoid popups during installs
   - lulu
   - blockblock
-  # used for home-ops setup
-  - fluxcd/tap/flux
-  - weaveworks/tap/gitops
-  - go-task/tap/go-task
-  - direnv
-  - ipcalc
-  - jq
-  - kubectl
-  - pre-commit
-  - sops
-  - terraform
-  - helm
-  - kustomize
-  - stern
-  - yamllint
-
 
 
 
