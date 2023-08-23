@@ -26,3 +26,8 @@
     - item.pos > 0
   loop: "{{ dockitems_persist }}"
   tags: ['dock']
+
+- name: Add in Applications to Others section.
+  include_tasks: tasks/dock-add-other.yml
+  loop: "{{ dockitems_other }}"
+  tags: ['dock']

@@ -13,7 +13,7 @@
 
 - name: Move dock item to the correct position.
   command:
-    cmd: dockutil --move '{{ item.name | default(item) }}' --position '{{ item.pos }}'
+    cmd: dockutil --move '{{ item.name | default(item) }}' --position '{{ item.pos }}' {% if item.section is defined %}--section '{{ item.section }}'{% endif %}
   register: dock_item_moved
   when: current_position|int != item.pos|int
 

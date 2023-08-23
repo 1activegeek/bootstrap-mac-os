@@ -16,7 +16,7 @@
   tags: ['dock']
 
 - name: Ensure Dock item {{ item.name | default(item) }} exists.
-  command: "dockutil --add '{{ item.path }}' --label '{{ item.name }}'"
+  command: "dockutil --add '{{ item.path }}' --label '{{ item.name }}' {% if item.display is defined %}--display '{{ item.display }}'{% endif %} {% if item.view is defined %}--view '{{ item.view }}'{% endif %}"
   when: dockitem_exists.rc >0 or
         dockitem_exists.rc == 0 and current_section == 'recent-apps'
   tags: ['dock']

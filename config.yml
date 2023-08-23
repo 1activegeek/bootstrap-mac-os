@@ -79,6 +79,18 @@ dockitems_persist:
 - name: "Terminal"
   path: "/System/Applications/Utilities/Terminal.app/"
   pos: 18
+- name: "Applications"
+  path: "/Applications/"
+  section: others
+  display: folder
+  view: grid
+  pos: 1
+- name: "Downloads"
+  path: "{{ ansible_env.HOME }}/Downloads"
+  section: others
+  display: folder
+  view: list
+  pos: 2
 
 # Install dotfiles from designated repo
 configure_dotfiles: false
