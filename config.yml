@@ -28,10 +28,10 @@ dockitems_persist:
   path: "/System/Applications/Music.app/"
   pos: 1
 - name: "Podcast"
-  path: "/System/Applications/Music.app/"
+  path: "/System/Applications/Podcasts.app/"
   pos: 2
 - name: "Books"
-  path: "/System/Applications/Music.app/"
+  path: "/System/Applications/Books.app/"
   pos: 3
 - name: "Photos"
   path: "/System/Applications/Photos.app/"
@@ -46,7 +46,7 @@ dockitems_persist:
   path: "/Applications/Google Chrome.app/"
   pos: 7
 - name: "Arc"
-  path: "/System/Applications/Mail.app/"
+  path: "/System/Applications/Arc.app/"
   pos: 8
 - name: "Mail"
   path: "/System/Applications/Mail.app/"
