@@ -22,6 +22,9 @@ dockitems_remove:
 - Freeform
 - TV
 - News
+- Numbers
+- Keynote
+- Pages
 - 'App Store'
 - 'System Settings'
 dockitems_persist:
