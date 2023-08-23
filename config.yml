@@ -46,7 +46,7 @@ dockitems_persist:
   path: "/Applications/Google Chrome.app/"
   pos: 7
 - name: "Arc"
-  path: "/System/Applications/Arc.app/"
+  path: "/Applications/Arc.app/"
   pos: 8
 - name: "Mail"
   path: "/System/Applications/Mail.app/"
