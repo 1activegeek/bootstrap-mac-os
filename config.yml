@@ -112,6 +112,7 @@ homebrew_packages:
   - age
   # - ansible # listing here for reference, but should be installed in bootstrap.sh
   - awscli
+  - duti
   - helm
   - k9s
   - kube-ps1
