@@ -70,8 +70,8 @@ dockitems_persist:
 - name: "Messages"
   path: "/System/Applications/Messages.app/"
   pos: 14
-- name: "Reminders"
-  path: "/System/Applications/Reminders.app/"
+- name: "TickTick"
+  path: "/Applications/TickTick.app/"
   pos: 15
 - name: "Obsidian"
   path: "/Applications/Obsidian.app/"
