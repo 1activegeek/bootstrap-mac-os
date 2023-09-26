@@ -123,21 +123,23 @@ homebrew_packages:
   - pygments
   - switchaudio-osx
   - terraform
-  # used for home-ops setup
-  - fluxcd/tap/flux
-  - weaveworks/tap/gitops
-  - go-task/tap/go-task
-  - direnv
-  - ipcalc
-  - jq
-  - kubectl
-  - pre-commit
-  - sops
-  - terraform
-  - helm
-  - kustomize
-  - stern
-  - yamllint
+  - tmux
+  - watch
+  # # used for home-ops setup
+  # - fluxcd/tap/flux
+  # - weaveworks/tap/gitops
+  # - go-task/tap/go-task
+  # - direnv
+  # - ipcalc
+  # - jq
+  # - kubectl
+  # - pre-commit
+  # - sops
+  # - terraform
+  # - helm
+  # - kustomize
+  # - stern
+  # - yamllint
   # these are at the end to avoid popups during installs
   - mas
   # Install cask apps, most of the usual apps to be installed here
