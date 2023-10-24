@@ -1,5 +1,7 @@
 ---
 # Reference for manual creation: https://github.com/lra/mackup/tree/master/doc#get-official-support-for-an-application
+# Issue found in macOS Sonoma: https://github.com/lra/mackup/issues/1924#issuecomment-1756330534
+# causing issues with apps keeping their settings at all
 
 # Checking to see if the mackup config file exists
 - name: Check for mackup config file
@@ -16,7 +18,7 @@
 #   when: not stat_result.stat.exists
 # Running mackup restore function to restore configurations
 - name: Running mackup restore function
-  command: mackup restore -f
+  command: mackup restore -f && mackup uninstall --force
 
 
 ## Mackup Apps
