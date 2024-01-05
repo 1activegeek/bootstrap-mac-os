@@ -151,12 +151,12 @@ homebrew_cask_apps:
   - android-file-transfer
   - altair-graphql-client
   - ankermake
-  # - ankerslicer
+  - ankerslicer
   - appcleaner
   - arc
   - balenaetcher
   - blender
-  # - clickup
+  - clickup
   - cyberduck
   - dash
   - discord
@@ -178,7 +178,6 @@ homebrew_cask_apps:
   - microsoft-teams
   - mullvadvpn
   - obs
-  - obsidian
   - openscad
   - pgadmin4
   - postman
@@ -221,6 +220,7 @@ mas_apps:
   - 1546729687  # Auto HD FPS for YouTube
   - 1482920575  # DuckDuckGo Privacy for Safari
   - 1472777122  # PayPal Honey
+  - 1549370672  # Raindrop.io 
   - 1463298887  # Userscripts
   # macOS Apps
   - 937984704   # Amphetamine
@@ -229,6 +229,8 @@ mas_apps:
   - 1142151959  # Just Focus
   - 1295203466  # Microsoft Remote Desktop
   - 419330170   # Moom
+  - 1564031042  # Omnivore (Read it later)
   - 1475387142  # Tailscale
   - 1482454543  # Twitter
+  - 1451685025  # Wireguard
   - 497799835   # Xcode
