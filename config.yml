@@ -147,7 +147,6 @@ homebrew_cask_apps:
   - 1kc-razer
   - 1password
   - 1password-cli
-  # - alfred
   - android-file-transfer
   - altair-graphql-client
   - ankermake
@@ -190,6 +189,7 @@ homebrew_cask_apps:
   - session-manager-plugin
   - shottr
   - shuttle
+  - signal
   - slack
   - stats
   - subler
