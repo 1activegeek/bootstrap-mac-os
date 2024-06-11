@@ -120,6 +120,7 @@ homebrew_packages:
   - kubernetes-cli
   - mackup
   - neofetch
+  - pinentry-mac #for use with homebrew/autoupdate
   - pygments
   - switchaudio-osx
   - terraform
