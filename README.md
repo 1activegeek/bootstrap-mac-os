@@ -16,6 +16,7 @@ This repo is intended to be used to bootstrap a brand new macOS installation. Un
 
 
 ## TODO:
+- Add install for ThumbHost3mf Quicklook: https://github.com/DavidPhillipOster/ThumbHost3mf 
 - Adjust folder layout to add Applications folder to the launchbar
 - Move hostname and sudo permission prompts to an include only if running the selected playbooks that need it
 - Fix ansible and brew commands not recognized after bootstrap
