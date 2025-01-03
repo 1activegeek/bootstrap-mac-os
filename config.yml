@@ -165,6 +165,7 @@ homebrew_cask_apps:
   - hpedrorodrigues/tools/dockutil
   - drawio
   - firefox
+  - flux
   - google-chrome
   - handbrake
   - home-assistant
