@@ -1,0 +1,12 @@
+# profiles/Brewfile.work - Work machine additions
+# Layered on top of the base Brewfile for the 'work' profile.
+
+# Communication
+cask "microsoft-teams"        # Microsoft Teams (work-specific)
+
+# Development / cloud
+brew "azure-cli"              # Azure CLI
+brew "awscli"                 # AWS CLI (already in base, kept for clarity)
+
+# Optional: corporate VPN, SSO tools, etc.
+# cask "cisco-secure-client"  # Cisco AnyConnect

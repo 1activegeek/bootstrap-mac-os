@@ -1,0 +1,13 @@
+# profiles/Brewfile.minimal - Minimal additions
+# For the 'minimal' profile, the base Brewfile already covers essentials.
+# This file intentionally contains few extras.
+#
+# The minimal profile uses the full base Brewfile but skips:
+#   - 3D printing tools
+#   - Heavy casks (Xcode, OBS, etc.)
+#   - Most MAS apps
+#
+# To further restrict, set MOD_DOCK=false and MOD_MACOS_DEFAULTS=false
+# via environment variables or the interactive module toggle menu.
+
+# Nothing additional for minimal — base Brewfile is sufficient.

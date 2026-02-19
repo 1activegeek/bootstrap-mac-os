@@ -1,1 +1,23 @@
+# macOS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Homebrew
+Brewfile.lock.json
+
+# Secrets — never commit these
+*.key
+*.pem
+id_rsa
+id_ed25519
+id_ecdsa
+*.gpg
+*.age
+.env
+.env.*
+
+# Bootstrap runtime
+.bootstrap_state

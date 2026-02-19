@@ -1,0 +1,237 @@
+#!/usr/bin/env bash
+# modules/03-macos-defaults.sh - macOS system preferences
+#
+# Applies macOS defaults via `defaults write`.
+# Tested on macOS Sequoia 15.x (Apple Silicon).
+#
+# Based on existing Ansible osx_defaults tasks + new requirements.
+# Where automation is not possible, a TODO comment explains what to do manually.
+#
+# References:
+#   https://github.com/mathiasbynens/dotfiles/blob/master/.macos
+#   https://github.com/kevinSuttle/macOS-Defaults/blob/master/REFERENCE.md
+
+log_info "Applying macOS defaults..."
+
+# Close System Settings to prevent it from overriding our changes
+osascript -e 'tell application "System Preferences" to quit' 2>/dev/null || true
+osascript -e 'tell application "System Settings" to quit' 2>/dev/null || true
+
+# ============================================
+# Dock
+# ============================================
+log_substep "Dock settings"
+
+# Icon size (normal and magnified)
+defaults write com.apple.dock tilesize          -float 60
+defaults write com.apple.dock largesize         -float 80
+
+# Minimize to app icon (not separate tile)
+defaults write com.apple.dock minimize-to-application -bool true
+
+# Auto-hide the Dock
+defaults write com.apple.dock autohide          -bool true
+
+# Hide recently-used apps section in Dock
+defaults write com.apple.dock show-recents      -bool false
+
+# Don't rearrange Spaces based on most recent use
+defaults write com.apple.dock mru-spaces        -bool false
+
+# Show indicator lights for open apps
+defaults write com.apple.dock show-process-indicators -bool true
+
+# ============================================
+# Trackpad
+# ============================================
+log_substep "Trackpad settings"
+
+# Natural scrolling: ON (keep the default macOS behavior)
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
+
+# Tap to click (enabled for current user and login screen)
+defaults write com.apple.AppleMultitouchTrackpad Clicking -int 1
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+# Tracking speed
+defaults write NSGlobalDomain com.apple.trackpad.scaling -float 1.5
+
+# Enable three-finger drag
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
+
+# ============================================
+# Keyboard
+# ============================================
+log_substep "Keyboard settings"
+
+# Enable full keyboard access (Tab to move focus between controls)
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+
+# Disable press-and-hold for keys (enable key repeat)
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+# Key repeat rate (lower = faster)
+defaults write NSGlobalDomain KeyRepeat -int 2
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+
+# ============================================
+# Finder
+# ============================================
+log_substep "Finder settings"
+
+# Show internal hard drives on desktop
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+
+# Show status bar at bottom
+defaults write com.apple.finder ShowStatusBar -bool true
+
+# Show path bar at bottom
+defaults write com.apple.finder ShowPathbar -bool true
+
+# Default new Finder window to Downloads
+defaults write com.apple.finder NewWindowTarget   -string "PfLo"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Downloads/"
+
+# Search current folder by default (not "This Mac")
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# Remove items from Trash after 30 days
+defaults write com.apple.finder FXRemoveOldTrashItems -bool true
+
+# Keep folders on top when sorting by name
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# Don't show warning when changing file extension
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+# Don't write .DS_Store files on network volumes or USB
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores    -bool true
+
+# Show all filename extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# Use column view in Finder by default (options: icnv clmv lisv Nlsv)
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+
+# ============================================
+# Screenshots
+# ============================================
+log_substep "Screenshot settings"
+
+# Save screenshots to ~/Desktop
+defaults write com.apple.screencapture location -string "${HOME}/Desktop"
+
+# Save in PNG format (options: BMP GIF JPG PDF TIFF PNG)
+defaults write com.apple.screencapture type -string "png"
+
+# Disable shadow in screenshots
+defaults write com.apple.screencapture disable-shadow -bool true
+
+# TODO: Disable the default Cmd+Shift+3 shortcut and assign to Kap instead.
+# This requires editing com.apple.symbolichotkeys which is complex.
+# Manual step: System Settings > Keyboard > Keyboard Shortcuts > Screenshots
+# Disable "Save picture of screen as file" (Cmd+Shift+3)
+# Then configure Kap's global shortcut in Kap preferences.
+
+# ============================================
+# Contacts
+# ============================================
+log_substep "Contacts settings"
+
+# Don't prefer nicknames over real names
+defaults write NSGlobalDomain NSPersonNameDefaultShouldPreferNicknamesPreference -int 0
+
+# ============================================
+# Safari
+# ============================================
+log_substep "Safari settings"
+
+# Show the Develop menu
+defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true
+defaults write com.apple.Safari IncludeDevelopMenu              -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+
+# Show full URL in address bar
+defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+
+# ============================================
+# Audio
+# ============================================
+log_substep "Audio settings"
+
+# Play feedback sound when volume is changed
+defaults write NSGlobalDomain com.apple.sound.beep.feedback -int 1
+
+# ============================================
+# Menu Bar / UI
+# ============================================
+log_substep "Menu bar / UI settings"
+
+# Always show scrollbars
+defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+
+# Expand save panel by default
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode  -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+
+# Expand print panel by default
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint  -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+
+# Disable the "Are you sure you want to open this application?" dialog
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+# ============================================
+# Activity Monitor
+# ============================================
+log_substep "Activity Monitor settings"
+
+# Show all processes in Activity Monitor
+defaults write com.apple.ActivityMonitor ShowCategory -int 0
+
+# Sort by CPU usage
+defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
+defaults write com.apple.ActivityMonitor SortDirection -int 0
+
+# ============================================
+# Misc / Power
+# ============================================
+log_substep "Miscellaneous settings"
+
+# Disable automatic capitalization
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+
+# Disable smart dashes
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+# Disable smart quotes
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+
+# Disable auto-correct
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+# ============================================
+# TODO items (require manual configuration or deeper research)
+# ============================================
+# - Mouse cursor color: Use System Settings > Accessibility > Display > Pointer
+#   to set a lighter cursor color. No reliable `defaults write` key found.
+# - Desktop wallpaper folders: System Settings > Wallpaper > Add Folder
+#   Set style to "Fit to Screen". Not reliably automatable via defaults write.
+# - Catppuccin theme: App-by-app. Ghostty: set in config. Zellij: set in config.
+#   Terminal.app themes require importing a profile.
+# - Kap shortcut: Open Kap > Preferences > Record shortcut: Cmd+Shift+3
+#   (after disabling the system screenshot shortcut manually)
+
+# ============================================
+# Restart affected services to apply changes
+# ============================================
+log_substep "Restarting Dock, Finder, and SystemUIServer"
+killall Dock          2>/dev/null || true
+killall Finder        2>/dev/null || true
+killall SystemUIServer 2>/dev/null || true
+
+log_success "macOS defaults applied"
+log_warn "Some settings may require a logout/restart to fully take effect."
