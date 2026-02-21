@@ -1,7 +1,0 @@
-# Reference for module: https://docs.ansible.com/ansible/latest/collections/community/general/mas_module.html#ansible-collections-community-general-mas-module
-
-- name: Install Mac App Store apps
-  mas:
-    id: "{{ item.name | default(item) }}"
-    state: present
-  loop: "{{ mas_apps }}"

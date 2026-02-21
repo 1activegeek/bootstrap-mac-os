@@ -1,9 +1,0 @@
----
-# Reference for Module: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/hostname_module.html#ansible-collections-ansible-builtin-hostname-module
-
-# Using question at start of run
-- name: Setting Hostname
-  ansible.builtin.hostname:
-    name: "{{ new_hostname }}"
-    use: macos
-  become: true
