@@ -21,7 +21,7 @@ fi
 # Dotfiles repo URL
 # ============================================
 # Passed in from bootstrap.sh via DOTFILES_REPO env var
-local dotfiles_repo="${DOTFILES_REPO:-https://github.com/shawnmix/dotfiles.git}"
+local dotfiles_repo="${DOTFILES_REPO:-https://github.com/1activegeek/dotfiles.git}"
 local chezmoi_src="${HOME}/.local/share/chezmoi"
 
 # ============================================

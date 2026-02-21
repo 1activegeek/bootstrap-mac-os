@@ -10,7 +10,7 @@
 #   ./bootstrap.sh [--unattended] [--phase2] [--debug]
 #
 # Usage (fresh machine via curl):
-#   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/shawnmix/bootstrap-mac-os/v2/bootstrap.sh)"
+#   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/1activegeek/bootstrap-mac-os/v2/bootstrap.sh)"
 #
 # Flags:
 #   --unattended   Skip interactive menu; use env vars or built-in defaults
@@ -35,7 +35,7 @@ if [[ -n "${BASH_SOURCE[0]:-}" ]] && [[ -f "${BASH_SOURCE[0]}" ]]; then
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 else
   # Running via curl | bash — clone the repo to ~/.bootstrap first
-  BOOTSTRAP_REPO="https://github.com/shawnmix/bootstrap-mac-os.git"
+  BOOTSTRAP_REPO="https://github.com/1activegeek/bootstrap-mac-os.git"
   BOOTSTRAP_DIR="${HOME}/.bootstrap"
 
   echo "[INFO] Cloning bootstrap repo to ${BOOTSTRAP_DIR}..."
@@ -86,7 +86,7 @@ export BOOTSTRAP_DEBUG
 # =============================================================================
 MACHINE_PROFILE="${MACHINE_PROFILE:-personal}"
 NEW_HOSTNAME="${NEW_HOSTNAME:-}"
-DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/shawnmix/dotfiles.git}"
+DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/1activegeek/dotfiles.git}"
 
 # Module toggles — all enabled by default
 MOD_HOMEBREW="${MOD_HOMEBREW:-true}"

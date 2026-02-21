@@ -8,13 +8,13 @@ Replaces the previous Ansible-based approach with a lean, dependency-free bootst
 ## Quick Start (fresh machine)
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/shawnmix/bootstrap-mac-os/v2/bootstrap.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/1activegeek/bootstrap-mac-os/v2/bootstrap.sh)"
 ```
 
 Or clone and run locally:
 
 ```bash
-git clone https://github.com/shawnmix/bootstrap-mac-os.git ~/.bootstrap
+git clone https://github.com/1activegeek/bootstrap-mac-os.git ~/.bootstrap
 ~/.bootstrap/bootstrap.sh
 ```
 
@@ -150,7 +150,7 @@ bootstrap-mac-os/
 └── dotfiles/              # Reference copy of chezmoi-managed files
 ```
 
-Dotfiles are managed in a **separate repo**: `github.com/shawnmix/dotfiles`  
+Dotfiles are managed in a **separate repo**: `github.com/1activegeek/dotfiles`  
 The `dotfiles/` directory here contains a reference copy of what chezmoi manages.
 
 ---

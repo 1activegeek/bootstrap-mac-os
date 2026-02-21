@@ -2,7 +2,7 @@
 
 Reference files for the chezmoi-managed dotfiles repo.
 
-These files live in a **separate private/public repo** at `github.com/shawnmix/dotfiles`
+These files live in a **separate private/public repo** at `github.com/1activegeek/dotfiles`
 and are managed by [chezmoi](https://www.chezmoi.io/).
 
 ## Structure
@@ -26,7 +26,7 @@ dotfiles/
 
 ```bash
 # Initialise on a new machine
-chezmoi init https://github.com/shawnmix/dotfiles.git
+chezmoi init https://github.com/1activegeek/dotfiles.git
 
 # Apply dotfiles
 chezmoi apply
