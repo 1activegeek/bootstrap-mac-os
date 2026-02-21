@@ -141,6 +141,7 @@ cask "shottr"                 # Screenshot tool with annotation
 cask "superwhisper"           # Dictation tool with LLM reformatting
 cask "tailscale"              # Mesh VPN (cask preferred over MAS)
 cask "taskexplorer"           # Process/task inspector
+cask "thaw"                   # Unfreeze stuck macOS apps
 cask "the-unarchiver"         # Archive extraction
 
 # 3D printing / design

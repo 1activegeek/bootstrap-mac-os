@@ -209,6 +209,7 @@
 | `superwhisper` | SuperWhisper | Dictation tool with LLM reformatting |
 | `tailscale` | Tailscale | Mesh VPN (cask preferred over MAS) |
 | `taskexplorer` | TaskExplorer | Process and network activity inspector |
+| `thaw` | Thaw | Unfreeze stuck macOS apps |
 | `the-unarchiver` | The Unarchiver | Archive extraction (many formats) |
 
 ### 3D Printing & Design
