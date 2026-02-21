@@ -249,7 +249,6 @@
 | DuckDuckGo Privacy Essentials | 1482920575 | DuckDuckGo tracker blocking extension |
 | Hush | 1544743900 | Cookie/notification banner blocker |
 | PayPal Honey | 1472777122 | Automatic coupon finder |
-| Raindrop.io | 1549370672 | Bookmark manager |
 | The Camelizer | 1532579087 | Amazon price history tracker |
 | uBlock Origin Lite | 6745342698 | Ad blocker for Safari |
 | Userscripts | 1463298887 | Run custom scripts in Safari |
@@ -258,7 +257,6 @@
 
 | App | MAS ID | Description |
 |-----|--------|-------------|
-| Actions For Obsidian | 1659667937 | Additional Shortcuts actions for Obsidian |
 | Obsidian Web Clipper | 6720708363 | Clip web content to Obsidian |
 
 ### Productivity & Apps
@@ -266,12 +264,8 @@
 | App | MAS ID | Description |
 |-----|--------|-------------|
 | Actions | 1586435171 | Additional actions for Apple Shortcuts |
-| AudioBookBinder | 413969927 | Combine audio files into audiobooks |
 | Data Jar | 1453273600 | Structured data store for Shortcuts |
-| Disk Speed Test | 425264550 | Measure disk read/write performance |
 | DuckDuckGo | 663592361 | DuckDuckGo privacy browser |
-| Exporter | 1099120373 | Export iMessages to text/PDF |
-| Just Focus | 1142151959 | Pomodoro focus timer |
 | Microsoft Remote Desktop | 1295203466 | RDP client for Windows/Azure |
 | Perplexity | 6714467650 | AI-powered search assistant |
 | Raycast Companion | 6738274497 | Raycast companion app |
@@ -304,8 +298,8 @@ These applications must be downloaded and installed manually:
 | Taps | 3 | — | 2 |
 | Formulae | 36 | 1 | 9 |
 | Casks | 50 | 1 | — |
-| MAS Apps | 20 | 1 | — |
-| **Total packages** | **109** | **+3** | **+11** |
+| MAS Apps | 14 | 1 | — |
+| **Total packages** | **103** | **+3** | **+11** |
 
 ---
 

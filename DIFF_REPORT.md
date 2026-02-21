@@ -163,12 +163,7 @@
 ### In v2 — New (not currently installed on machine)
 | App | MAS ID | Note |
 |-----|--------|------|
-| Actions For Obsidian | 1659667937 | Obsidian Shortcuts integration |
-| AudioBookBinder | 413969927 | |
-| Disk Speed Test | 425264550 | |
-| Exporter | 1099120373 | Export iMessages |
 | Hush | 1544743900 | Cookie/notification banner blocker |
-| Just Focus | 1142151959 | Pomodoro timer |
 | Microsoft Remote Desktop | 1295203466 | |
 | Obsidian Web Clipper | 6720708363 | |
 | Okta Verify | 490179405 | Work profile only |
@@ -179,14 +174,19 @@
 ### Dropped from v2 (currently installed but removed)
 | App | MAS ID | Why Removed |
 |-----|--------|-------------|
+| Actions For Obsidian | 1659667937 | Dropped per user decision |
+| AudioBookBinder | 413969927 | Dropped per user decision |
+| Disk Speed Test | 425264550 | Dropped per user decision |
+| Exporter | 1099120373 | Dropped per user decision |
+| Just Focus | 1142151959 | Dropped per user decision |
 | Presentify | 1507246666 | Dropped per user decision |
-| Raindrop.io | 1549370672 | Dropped per user decision (still in Safari Extensions section) |
+| Raindrop.io | 1549370672 | Dropped per user decision |
 | Tailscale | 1475387142 | Moved to cask (`tailscale`) |
 | Twitter | 1482454543 | Dropped per user decision |
 | WireGuard | 1451685025 | Dropped per user decision |
 
 ### Kept (present on machine and in v2)
-`1Password for Safari` · `Actions` · `Auto HD FPS for YouTube` · `Data Jar` · `DuckDuckGo` · `DuckDuckGo Privacy Essentials` · `Exporter` · `PayPal Honey` · `Perplexity` · `Raindrop.io` · `Userscripts` · `Xcode`
+`1Password for Safari` · `Actions` · `Auto HD FPS for YouTube` · `Data Jar` · `DuckDuckGo` · `DuckDuckGo Privacy Essentials` · `PayPal Honey` · `Perplexity` · `Userscripts` · `Xcode`
 
 ---
 

@@ -171,23 +171,17 @@ mas "Auto HD FPS for YouTube",        id: 1546729687
 mas "DuckDuckGo Privacy Essentials",  id: 1482920575
 mas "Hush",                           id: 1544743900   # Cookie/notification banner blocker
 mas "PayPal Honey",                   id: 1472777122
-mas "Raindrop.io",                    id: 1549370672
 mas "The Camelizer",                  id: 1532579087   # Amazon price history tracker
 mas "uBlock Origin Lite",             id: 6745342698   # Ad blocker for Safari
 mas "Userscripts",                    id: 1463298887
 
 # Obsidian extensions
-mas "Actions For Obsidian",           id: 1659667937
 mas "Obsidian Web Clipper",           id: 6720708363
 
 # Productivity apps
 mas "Actions",                        id: 1586435171   # Shortcuts actions
-mas "AudioBookBinder",                id: 413969927
 mas "Data Jar",                       id: 1453273600
-mas "Disk Speed Test",                id: 425264550
 mas "DuckDuckGo",                     id: 663592361    # DuckDuckGo browser
-mas "Exporter",                       id: 1099120373   # Export iMessages
-mas "Just Focus",                     id: 1142151959   # Pomodoro timer
 mas "Microsoft Remote Desktop",       id: 1295203466
 mas "Perplexity",                     id: 6714467650   # AI search
 mas "Raycast Companion",              id: 6738274497
