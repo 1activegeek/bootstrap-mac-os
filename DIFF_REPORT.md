@@ -1,213 +1,192 @@
 # Brewfile Diff Report — Current Machine vs. v2 Bootstrap
 
-> Generated: 2026-02-19  
-> Current machine dump: `brew bundle dump` (live)  
+> Generated: 2026-02-21 (updated after user review)
+> Current machine dump: `brew bundle dump` (live, captured 2026-02-19)  
 > New Brewfile: `Brewfile` + `profiles/Brewfile.work` + `profiles/Brewfile.homelab`
 
 ---
 
 ## Summary
 
-| Category | New | Removed | Kept | Total in v2 |
-|----------|----:|--------:|-----:|------------:|
-| Taps | +2 | -3 | 5 | 7 |
-| Formulae | +8 | -32 | 33 | 41 |
-| Casks | +32 | -23 | 35 | 67 |
-| MAS Apps | +10 | -7 | 9 | 19 |
-| VS Code Extensions | — | — | 76 | not tracked |
+| Category | In v2 | Not in v2 (dropped) |
+|----------|------:|--------------------:|
+| Taps | 3 base + 2 homelab | `homebrew/autoupdate` (runtime), `hpedrorodrigues/tools` (obsolete), `weaveworks/tap` (dropped) |
+| Formulae | 36 base + 9 homelab + 1 work | ~20 formulae intentionally dropped |
+| Casks | 50 base + 1 work | ~15 casks intentionally dropped |
+| MAS Apps | 20 base + 1 work | ~8 MAS apps intentionally dropped |
+| VS Code Extensions | not tracked | 76 — handled by VS Code Settings Sync |
 
 ---
 
 ## Taps
 
-### ++ New (2)
-These taps are in the v2 Brewfile but not currently installed:
+### In v2
+| Tap | Scope | Note |
+|-----|-------|------|
+| `hashicorp/tap` | base | Terraform official tap |
+| `anomalyco/tap` | base | opencode CLI |
+| `oven-sh/bun` | base | Bun JavaScript runtime |
+| `fluxcd/tap` | homelab | Flux CD |
+| `go-task/tap` | homelab | go-task (Taskfile) |
 
-| Tap | Note |
-|-----|------|
-| `homebrew/bundle` | Required for Brewfile support |
-| `homebrew/services` | Required for service management |
-
-### -- Removed (3)
-Currently tapped but not in v2 Brewfile:
-
-| Tap | Note |
-|-----|------|
-| `homebrew/autoupdate` | Configured by `08-homebrew-autoupdate.sh` at runtime — not needed in Brewfile |
-| `hpedrorodrigues/tools` | Was old `dockutil` tap — dockutil no longer needs it |
-| `oven-sh/bun` | Bun dropped from bootstrap (installed via mise/other means if needed) |
-
-### == Kept (5)
-`anomalyco/tap` · `fluxcd/tap` · `go-task/tap` · `hashicorp/tap` · `weaveworks/tap`
+### Dropped / Not in v2
+| Tap | Why |
+|-----|-----|
+| `homebrew/bundle` | Built into Homebrew core — no longer needs explicit tap |
+| `homebrew/services` | Built into Homebrew core — no longer needs explicit tap |
+| `homebrew/autoupdate` | Configured at runtime by `08-homebrew-autoupdate.sh` — not in Brewfile |
+| `hpedrorodrigues/tools` | Was old `dockutil` tap — `dockutil` is now in homebrew-core |
+| `weaveworks/tap` | Weave GitOps CLI dropped per user decision |
 
 ---
 
 ## Formulae (CLI Tools)
 
-### ++ New (8)
-In the v2 Brewfile but not currently installed:
-
+### In v2 — New (not currently installed on machine)
 | Formula | Description |
 |---------|-------------|
-| `crane` | Container image registry tool (homelab) |
+| `bat` | Better `cat` with syntax highlighting |
+| `bat-extras` | bat integrations (batgrep, batman, etc.) |
+| `carapace` | Multi-shell argument completer |
+| `fabric-ai` | AI augmentation framework |
 | `fastfetch` | System info display (replaces neofetch) |
-| `fluxcd/tap/flux` | Flux CD GitOps operator (homelab) |
+| `fd` | Fast `find` replacement |
+| `ffmpeg` | Audio/video conversion |
+| `gemini-cli` | Google Gemini CLI |
+| `gh` | GitHub CLI |
 | `hashicorp/tap/terraform` | Terraform via official tap (replaces bare `terraform`) |
 | `kustomize` | Kubernetes config customization (homelab) |
-| `pinentry-mac` | GPG pinentry via macOS Keychain |
-| `stern` | Multi-pod Kubernetes log tailing (homelab) |
+| `oven-sh/bun/bun` | Bun JavaScript runtime |
+| `tmux` | Terminal multiplexer (re-added; kept alongside zellij) |
 | `yamllint` | YAML linter (homelab) |
+| `yt-dlp` | Audio/video downloader |
 
-### -- Removed (32)
-Currently installed but intentionally dropped from v2:
-
+### Dropped from v2 (currently installed but removed)
 | Formula | Why Removed |
 |---------|-------------|
 | `ansible` | Replaced by pure shell scripts — core reason for v2 |
-| `bat` | Nice tool but not in base bootstrap scope; install manually if needed |
-| `bat-extras` | Same as above |
-| `carapace` | Shell completion tool — not in bootstrap scope |
-| `docker` | Docker formula replaced by `docker` **cask** (Docker Desktop) |
+| `crane` | Container registry tool — dropped per user decision |
+| `docker` | Formula replaced by `docker` **cask** (Docker Desktop) |
 | `docker-compose` | Bundled with Docker Desktop cask |
 | `docutils` | Python doc tool — not in scope |
-| `fabric-ai` | AI framework — install manually if needed |
-| `fd` | Fast find replacement — not in base scope (used by fzf optionally) |
-| `ffmpeg` | Video tool — install manually if needed |
-| `gemini-cli` | Google Gemini CLI — not in scope |
-| `gh` | GitHub CLI — install manually if needed |
-| `gnu-sed` | GNU sed — not in scope |
+| `gnu-sed` | Not in scope |
 | `minicom` | Serial terminal — not in scope |
 | `mise` | Runtime manager — install manually; not universal enough for base |
-| `mysql-client` | DB client — install manually per-project |
+| `mysql-client` | Install manually per-project |
 | `nmap` | Network scanner — install manually if needed |
-| `ollama` | Moved to **cask** (Ollama has a proper GUI cask now) |
-| `openjdk` | Java — install via mise/manually per-project |
+| `ollama` | Moved to **cask** (Ollama has a proper GUI cask) |
+| `openjdk` | Install via mise/manually per-project |
 | `openssl@1.1` | Legacy OpenSSL — not needed in base bootstrap |
-| `oven-sh/bun/bun` | Bun dropped; install via mise if needed |
 | `picocom` | Serial terminal — not in scope |
-| `pipx` | Python tool installer — install manually |
-| `pulumi` | IaC tool — install manually if needed |
-| `pyenv` | Python version mgr — replaced by mise |
-| `ruby@3.2` | Ruby — install via mise/manually per-project |
+| `pinentry-mac` | GPG pinentry — dropped per user decision |
+| `pipx` | Install manually |
+| `pulumi` | Install manually if needed |
+| `pyenv` | Replaced by mise |
+| `ruby@3.2` | Install via mise/manually per-project |
+| `stern` | Multi-pod K8s log tailing — dropped per user decision |
 | `terraform` | Replaced by `hashicorp/tap/terraform` (official tap) |
-| `tmux` | Replaced by `zellij` |
-| `tweakcc` | Claude Code tweaks — install manually if needed |
-| `uv` | Python package manager — install manually |
-| `virtualenv` | Python venv — install manually |
-| `yt-dlp` | YouTube downloader — install manually if needed |
+| `tweakcc` | Install manually if needed |
+| `uv` | Install manually |
+| `virtualenv` | Install manually |
+| `weaveworks/tap/gitops` | Weave GitOps CLI — dropped per user decision |
 
-### == Kept (33)
-`age` · `anomalyco/tap/opencode` · `atuin` · `awscli` · `azure-cli` · `chezmoi` · `chroma` · `direnv` · `dockutil` · `duti` · `eza` · `fzf` · `go-task/tap/go-task` · `helm` · `ipcalc` · `jq` · `k9s` · `kube-ps1` · `kubectx` · `kubernetes-cli` · `mas` · `mole` · `pre-commit` · `pygments` · `sops` · `starship` · `switchaudio-osx` · `watch` · `weaveworks/tap/gitops` · `zellij` · `zoxide` · `zsh-autosuggestions` · `zsh-syntax-highlighting`
+### Kept (present on machine and in v2)
+`age` · `anomalyco/tap/opencode` · `atuin` · `awscli` · `azure-cli` · `chezmoi` · `chroma` · `direnv` · `dockutil` · `duti` · `eza` · `fluxcd/tap/flux` · `fzf` · `go-task/tap/go-task` · `helm` · `ipcalc` · `jq` · `k9s` · `kube-ps1` · `kubectx` · `kubernetes-cli` · `mas` · `mole` · `pre-commit` · `pygments` · `sops` · `starship` · `switchaudio-osx` · `watch` · `zellij` · `zoxide` · `zsh-autosuggestions` · `zsh-syntax-highlighting`
 
 ---
 
 ## Casks (GUI Applications)
 
-### ++ New (32)
-In the v2 Brewfile but not currently installed:
-
+### In v2 — New (not currently installed on machine)
 | Cask | App | Description |
 |------|-----|-------------|
-| `android-file-transfer` | Android File Transfer | Android device file access |
-| `anythingllm` | AnythingLLM | Local AI document assistant |
-| `blender` | Blender | 3D creation suite |
-| `clickup` | ClickUp | Project management |
-| `cyberduck` | Cyberduck | FTP/S3/cloud file browser |
-| `dash` | Dash | Offline API documentation |
-| `docker` | Docker Desktop | Container platform (GUI) |
-| `drawio` | draw.io | Diagramming |
+| `antigravity` | Antigravity | AI coding IDE |
+| `bambu-studio` | Bambu Studio | Bambu Lab slicer |
+| `brave-browser` | Brave Browser | Privacy-focused browser |
+| `claude` | Claude | Anthropic Claude desktop app |
+| `claude-code` | Claude Code | Claude Code CLI |
+| `codex` | Codex | OpenAI Codex agent |
 | `eufymake-studio` | EufyMake Studio | AnkerMake/EufyMake slicer (replaces deprecated `ankermake` cask) |
-| `firefox` | Firefox | Mozilla Firefox browser |
-| `flux` | f.lux | Screen color temp (replaces `flux-app` which had wrong token) |
-| `handbrake` | HandBrake | Video transcoder (replaces `handbrake-app`) |
-| `latest` | Latest | App update checker |
-| `lm-studio` | LM Studio | Local LLM GUI runner |
-| `mullvadvpn` | Mullvad VPN | VPN client (replaces `mullvad-vpn`) |
-| `notion` | Notion | Notes and wikis |
-| `notion-calendar` | Notion Calendar | Calendar |
-| `notion-mail` | Notion Mail | Email client |
-| `ollama` | Ollama | Local LLM runner (moved from formula to cask) |
-| `openscad` | OpenSCAD | Programmatic 3D CAD (replaces `openscad@snapshot`) |
-| `orcaslicer` | OrcaSlicer | 3D printing slicer |
-| `postman` | Postman | API testing |
-| `powershell` | PowerShell | Microsoft cross-platform shell |
-| `pronotes` | ProNotes | Quick notes |
-| `sequel-ace` | Sequel Ace | MySQL/MariaDB database client |
-| `session-manager-plugin` | AWS Session Manager Plugin | AWS SSM CLI plugin |
-| `signal` | Signal | Encrypted messaging |
-| `subler` | Subler | MP4/MKV metadata editor |
-| `suspicious-package` | Suspicious Package | Inspect .pkg installers |
-| `teamviewer` | TeamViewer | Remote desktop |
-| `utm` | UTM | Virtual machines on Apple Silicon |
-| `wireshark` | Wireshark | Network analyzer (replaces `wireshark-app`) |
+| `flux` | f.lux | Screen color temp (correct token; replaces old `flux-app`) |
+| `gcloud-cli` | Google Cloud CLI | Google Cloud SDK |
+| `handy` | Handy | Speech-to-text with LLM reformatting |
+| `handbrake` | HandBrake | Video transcoder (correct token; replaces old `handbrake-app`) |
+| `home-assistant` | Home Assistant | Home Assistant companion app |
+| `lm-studio` | LM Studio | Local LLM GUI runner (correct token; replaces old `lmstudio`) |
+| `obsidian` | Obsidian | Knowledge base and note-taking |
+| `opencode-desktop` | opencode Desktop | opencode desktop client |
+| `prusaslicer` | PrusaSlicer | PrusaSlicer for 3D printing |
+| `superwhisper` | SuperWhisper | Dictation tool with LLM reformatting |
+| `tailscale` | Tailscale | Mesh VPN (cask; replaces old `tailscale-app` and MAS entry) |
+| `thumbhost3mf` | Thumbhost 3MF | Finder thumbnails for .3mf files (cask, not MAS) |
+| `yaak` | Yaak | REST, GraphQL and gRPC API client |
 
-### -- Removed (23)
-Currently installed but intentionally dropped from v2:
-
+### Dropped from v2 (currently installed but removed)
 | Cask | App | Why Removed |
 |------|-----|-------------|
-| `antigravity` | Antigravity | AI IDE — not in bootstrap scope; install manually |
-| `bambu-studio` | Bambu Studio | Slicer — replaced by OrcaSlicer (works with Bambu too) |
-| `brave-browser` | Brave | Browser — not in base scope; install manually |
-| `claude` | Claude | Desktop AI app — not needed with opencode/ChatGPT |
-| `claude-code` | Claude Code | CLI — install manually post-bootstrap |
-| `codex` | Codex | OpenAI CLI agent — not in scope |
-| `dockutil` | dockutil | Was wrong (cask); now correctly a **formula** |
-| `flux-app` | f.lux | Wrong cask token — replaced by correct `flux` |
-| `gcloud-cli` | Google Cloud CLI | Not in base scope; install manually if needed |
-| `handbrake-app` | HandBrake | Wrong cask token — replaced by correct `handbrake` |
-| `handy` | Handy | Speech-to-text — not in scope; install manually |
-| `home-assistant` | Home Assistant | Smart home — not in bootstrap scope |
-| `microsoft-auto-update` | Microsoft AutoUpdate | Installed by Microsoft apps automatically |
-| `mullvad-vpn` | Mullvad VPN | Wrong cask token — replaced by correct `mullvadvpn` |
-| `obsidian` | Obsidian | Notes app — configured via dotfiles, not bootstrap |
-| `opencode-desktop` | opencode Desktop | CLI via formula preferred |
-| `openscad@snapshot` | OpenSCAD Snapshot | Replaced by stable `openscad` |
-| `prusaslicer` | PrusaSlicer | Slicer — replaced by OrcaSlicer |
-| `superwhisper` | SuperWhisper | Dictation — not in scope; install manually |
-| `tailscale-app` | Tailscale | Wrong token — Tailscale is in MAS (id: 1475387142) |
-| `thumbhost3mf` | Thumbhost 3MF | MAS-only app — moved to manual install list |
-| `wireshark-app` | Wireshark | Wrong cask token — replaced by correct `wireshark` |
-| `yaak` | Yaak | API client — replaced by Postman in base |
+| `android-file-transfer` | Android File Transfer | Dropped per user decision |
+| `anythingllm` | AnythingLLM | Dropped per user decision |
+| `blender` | Blender | Dropped per user decision |
+| `clickup` | ClickUp | Dropped per user decision |
+| `cyberduck` | Cyberduck | Dropped per user decision |
+| `dash` | Dash | Dropped per user decision |
+| `drawio` | draw.io | Dropped per user decision |
+| `firefox` | Firefox | Dropped per user decision |
+| `jordanbaird-ice` | Ice | Dropped per user decision |
+| `latest` | Latest | Dropped per user decision |
+| `microsoft-auto-update` | Microsoft AutoUpdate | Installed automatically by Microsoft apps |
+| `mullvadvpn` | Mullvad VPN | Dropped per user decision |
+| `notion` | Notion | Dropped per user decision |
+| `notion-calendar` | Notion Calendar | Dropped per user decision |
+| `notion-mail` | Notion Mail | Dropped per user decision |
+| `openscad` | OpenSCAD (stable) | Outdated 2021.01 — replaced by `openscad@snapshot` |
+| `postman` | Postman | Dropped per user decision (replaced by `yaak`) |
+| `powershell` | PowerShell | Dropped per user decision |
+| `pronotes` | ProNotes | Dropped per user decision |
+| `raspberry-pi-imager` | Raspberry Pi Imager | Dropped per user decision |
+| `sequel-ace` | Sequel Ace | Dropped per user decision |
+| `session-manager-plugin` | AWS Session Manager Plugin | Dropped per user decision |
+| `signal` | Signal | Dropped per user decision |
+| `subler` | Subler | Dropped per user decision |
+| `suspicious-package` | Suspicious Package | Dropped per user decision |
+| `teamviewer` | TeamViewer | Dropped per user decision |
+| `utm` | UTM | Dropped per user decision |
+| `wireshark` | Wireshark | Dropped per user decision |
 
-### == Kept (35)
-`1password` · `1password-cli` · `appcleaner` · `balenaetcher` · `blockblock` · `browserosaurus` · `chatgpt` · `discord` · `disk-inventory-x` · `font-jetbrains-mono-nerd-font` · `ghostty` · `google-chrome` · `jordanbaird-ice` · `kap` · `keka` · `keyboard-cowboy` · `knockknock` · `leader-key` · `lulu` · `lunar` · `mactracker` · `microsoft-teams` · `obs` · `orbstack` · `raspberry-pi-imager` · `raycast` · `shapr3d` · `shottr` · `slack` · `taskexplorer` · `the-unarchiver` · `tor-browser` · `visual-studio-code` · `vlc` · `zoom`
+### Kept (present on machine and in v2)
+`1password` · `1password-cli` · `appcleaner` · `balenaetcher` · `blockblock` · `browserosaurus` · `chatgpt` · `discord` · `disk-inventory-x` · `docker` · `font-jetbrains-mono-nerd-font` · `ghostty` · `google-chrome` · `kap` · `keka` · `keyboard-cowboy` · `knockknock` · `leader-key` · `lulu` · `lunar` · `mactracker` · `microsoft-teams` (work) · `obs` · `ollama` · `openscad@snapshot` · `orbstack` · `raycast` · `shapr3d` · `shottr` · `slack` · `taskexplorer` · `the-unarchiver` · `tor-browser` · `visual-studio-code` · `vlc` · `zoom`
 
 ---
 
 ## Mac App Store Apps
 
-### ++ New (10)
-In v2 but not currently installed:
+### In v2 — New (not currently installed on machine)
+| App | MAS ID | Note |
+|-----|--------|------|
+| Actions For Obsidian | 1659667937 | Obsidian Shortcuts integration |
+| AudioBookBinder | 413969927 | |
+| Disk Speed Test | 425264550 | |
+| Exporter | 1099120373 | Export iMessages |
+| Hush | 1544743900 | Cookie/notification banner blocker |
+| Just Focus | 1142151959 | Pomodoro timer |
+| Microsoft Remote Desktop | 1295203466 | |
+| Obsidian Web Clipper | 6720708363 | |
+| Okta Verify | 490179405 | Work profile only |
+| Raycast Companion | 6738274497 | |
+| The Camelizer | 1532579087 | Amazon price tracker |
+| uBlock Origin Lite | 6745342698 | Safari ad blocker |
 
-| App | MAS ID |
-|-----|--------|
-| AudioBookBinder | 413969927 |
-| Disk Speed Test | 425264550 |
-| Exporter | 1099120373 |
-| Just Focus | 1142151959 |
-| Microsoft Remote Desktop | 1295203466 |
-| Presentify | 1507246666 |
-| Raindrop.io | 1549370672 |
-| Tailscale | 1475387142 |
-| Twitter | 1482454543 |
-| WireGuard | 1451685025 |
-
-### -- Removed (7)
-Currently installed via MAS but dropped from v2:
-
+### Dropped from v2 (currently installed but removed)
 | App | MAS ID | Why Removed |
 |-----|--------|-------------|
-| Actions For Obsidian | 1659667937 | Obsidian-specific — install manually if using Obsidian |
-| Hush | 1544743900 | Safari extension — not in base scope |
-| Obsidian Web Clipper | 6720708363 | Obsidian-specific — install manually |
-| Okta Verify | 490179405 | Work SSO — add to `profiles/Brewfile.work` if needed |
-| Raycast Companion | 6738274497 | Installed automatically by Raycast |
-| The Camelizer | 1532579087 | Amazon price tracker — install manually if needed |
-| uBlock Origin Lite | 6745342698 | Ad blocker — install manually via Safari Extension Gallery |
+| Presentify | 1507246666 | Dropped per user decision |
+| Raindrop.io | 1549370672 | Dropped per user decision (still in Safari Extensions section) |
+| Tailscale | 1475387142 | Moved to cask (`tailscale`) |
+| Twitter | 1482454543 | Dropped per user decision |
+| WireGuard | 1451685025 | Dropped per user decision |
 
-### == Kept (9)
-`1Password for Safari` · `Actions` · `Auto HD FPS for YouTube` · `Data Jar` · `DuckDuckGo` · `PayPal Honey` · `Perplexity` · `Userscripts` · `Xcode`
+### Kept (present on machine and in v2)
+`1Password for Safari` · `Actions` · `Auto HD FPS for YouTube` · `Data Jar` · `DuckDuckGo` · `DuckDuckGo Privacy Essentials` · `Exporter` · `PayPal Honey` · `Perplexity` · `Raindrop.io` · `Userscripts` · `Xcode`
 
 ---
 
@@ -216,43 +195,24 @@ Currently installed via MAS but dropped from v2:
 76 extensions are currently installed and tracked by `brew bundle dump`.  
 **The v2 Brewfile does not manage VS Code extensions** — this is intentional, as VS Code's Settings Sync (backed by GitHub or Microsoft account) handles extension sync automatically.
 
-**Action:** Sign into VS Code Settings Sync on a new machine and extensions restore automatically. No manual Brewfile management needed.
-
-<details>
-<summary>Full list of 76 currently installed extensions</summary>
-
-`1password.op-vscode` · `alexdauenhauer.catppuccin-noctis` · `anthropic.claude-code` · `bierner.color-info` · `bierner.emojisense` · `bierner.markdown-checkbox` · `blueglassblock.better-json5` · `catppuccin.catppuccin-vsc` · `christian-kohler.npm-intellisense` · `christian-kohler.path-intellisense` · `codespaces-contrib.codeswing` · `davraamides.todotxt-mode` · `dbaeumer.vscode-eslint` · `docker.docker` · `eamodio.gitlens` · `editorconfig.editorconfig` · `esbenp.prettier-vscode` · `formulahendry.auto-close-tag` · `formulahendry.code-runner` · `github.copilot-chat` · `github.vscode-github-actions` · `github.vscode-pull-request-github` · `golang.go` · `google.geminicodeassist` · `googlecloudtools.cloudcode` · `growthjack.claude-code-usage` · `haihxiao.oaslinter` · `hashicorp.terraform` · `hediet.vscode-drawio` · `humao.rest-client` · `hverlin.mise-vscode` · `ibm.output-colorizer` · `irongeek.vscode-env` · `kamikillerto.vscode-colorize` · `keesschollaart.vscode-home-assistant` · `kelvin.vscode-sshfs` · `mhutchie.git-graph` · `mikestead.dotenv` · `mitchdenny.ecdc` · `ms-azuretools.vscode-containers` · `ms-azuretools.vscode-docker` · `ms-kubernetes-tools.vscode-kubernetes-tools` · `ms-python.debugpy` · `ms-python.isort` · `ms-python.python` · `ms-python.vscode-pylance` · `ms-python.vscode-python-envs` · `ms-toolsai.jupyter` · `ms-toolsai.jupyter-keymap` · `ms-toolsai.jupyter-renderers` · `ms-toolsai.vscode-jupyter-cell-tags` · `ms-toolsai.vscode-jupyter-slideshow` · `ms-vscode-remote.remote-containers` · `ms-vscode-remote.remote-ssh` · `ms-vscode-remote.remote-ssh-edit` · `ms-vscode.cpptools` · `ms-vscode.powershell` · `ms-vscode.remote-explorer` · `openai.chatgpt` · `pkief.material-icon-theme` · `rarnoldmobile.todo-txt` · `redhat.ansible` · `redhat.java` · `redhat.vscode-commons` · `redhat.vscode-yaml` · `samuelcolvin.jinjahtml` · `signageos.signageos-vscode-sops` · `sst-dev.opencode` · `streetsidesoftware.code-spell-checker` · `takumii.markdowntable` · `tamasfe.even-better-toml` · `tomoki1207.pdf` · `vsls-contrib.codetour` · `vsls-contrib.gistfs` · `william-voyek.vscode-nginx` · `yzhang.markdown-all-in-one`
-
-</details>
+**Action:** Sign into VS Code Settings Sync on a new machine and extensions restore automatically.
 
 ---
 
-## Action Items from This Diff
+## Token / Category Corrections Applied
 
-### Things to consider adding back to the Brewfile
-
-| Item | Category | Reason to Consider |
-|------|----------|--------------------|
-| `gh` (GitHub CLI) | formula | Widely used; integrates with VS Code, copilot, etc. |
-| `fd` | formula | Fast file finder; used by fzf's `FZF_DEFAULT_COMMAND` in `14-fzf.zsh` |
-| `bat` | formula | Better `cat`; pairs well with fzf preview panes |
-| `obsidian` | cask | You use it heavily — consider adding back |
-| `thumbhost3mf` | MAS | You have it installed; useful for 3MF files |
-| `Okta Verify` | MAS | Add to `profiles/Brewfile.work` |
-| `uBlock Origin Lite` | MAS | Useful Safari adblocker |
-| `Hush` | MAS | Safari cookie notice blocker |
-| `Actions For Obsidian` | MAS | If keeping Obsidian in the list |
-| `superwhisper` | cask | You currently use it; worth keeping in personal profile |
-| `brave-browser` | cask | You have it; add to personal profile if preferred |
-| `home-assistant` | cask | You have it; add if Home Assistant is part of your setup |
-| `gcloud-cli` | cask | You have it; add to homelab profile |
-
-### Token corrections already applied (no action needed)
-- `flux-app` → `flux` ✅
-- `handbrake-app` → `handbrake` ✅
-- `mullvad-vpn` → `mullvadvpn` ✅
-- `wireshark-app` → `wireshark` ✅
-- `openscad@snapshot` → `openscad` ✅
-- `dockutil` cask → formula ✅
-- `ollama` formula → cask ✅
-- `tailscale-app` cask → MAS ✅
+| Old (wrong) | New (correct) | Note |
+|-------------|---------------|------|
+| `flux-app` | `flux` | Correct cask token |
+| `handbrake-app` | `handbrake` | Correct cask token |
+| `lmstudio` | `lm-studio` | Correct cask token |
+| `mullvad-vpn` | `mullvadvpn` | Correct cask token |
+| `openscad@snapshot` was removed → | `openscad@snapshot` restored | Stable `openscad` is outdated 2021.01; snapshot is 2026.x |
+| `wireshark-app` | `wireshark` | Correct cask token |
+| `dockutil` (cask) | `dockutil` (formula) | Correct install type |
+| `mole` (cask) | `mole` (formula) | Correct install type |
+| `ollama` (formula) | `ollama` (cask) | GUI cask preferred |
+| `tailscale-app` or MAS | `tailscale` (cask) | Cask preferred for auto-updates |
+| `thumbhost3mf` (MAS) | `thumbhost3mf` (cask) | Confirmed cask via `brew info --cask thumbhost3mf` |
+| `homebrew/bundle` tap | removed | Built into Homebrew core |
+| `homebrew/services` tap | removed | Built into Homebrew core |

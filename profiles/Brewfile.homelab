@@ -2,25 +2,19 @@
 # Layered on top of the base Brewfile for the 'homelab' profile.
 # Focuses on Kubernetes, GitOps, and infrastructure tooling.
 
+# Additional taps (base already has hashicorp/tap, anomalyco/tap)
+tap "fluxcd/tap"
+tap "go-task/tap"
+
 # GitOps
-brew "fluxcd/tap/flux"        # Flux CD — GitOps operator
-brew "weaveworks/tap/gitops"  # Weave GitOps CLI
+brew "fluxcd/tap/flux"        # Flux CD — GitOps continuous delivery operator
 
 # Infrastructure / automation
 brew "direnv"                 # Per-directory environment variables
 brew "go-task/tap/go-task"    # Taskfile runner (modern make alternative)
 brew "ipcalc"                 # IP address / subnet calculator
 brew "jq"                     # JSON processor
+brew "kustomize"              # Kubernetes configuration customization
 brew "pre-commit"             # Git hook framework
 brew "sops"                   # Secrets OPerationS (encryption for config files)
-brew "stern"                  # Multi-pod Kubernetes log tailing
 brew "yamllint"               # YAML linter
-brew "kustomize"              # Kubernetes configuration customization
-
-# Container tools
-brew "crane"                  # Tool for interacting with remote images/registries
-
-# Additional taps
-tap "fluxcd/tap"
-tap "weaveworks/tap"
-tap "go-task/tap"

@@ -2,7 +2,7 @@
 # Base packages installed on ALL machine profiles.
 # Profile-specific additions are in profiles/Brewfile.<profile>
 #
-# Verified tokens as of 2026-02-18 on macOS Sequoia (15.x)
+# Verified tokens as of 2026-02-19 on macOS Sequoia (15.x)
 # Run `brew bundle check` to verify before a full install.
 #
 # Notes:
@@ -12,14 +12,14 @@
 #   - ankerslicer has no Homebrew cask — install manually
 #   - browserosaurus is deprecated (will disable Aug 2026) — kept for now
 #   - Audible is NOT on the Mac App Store — removed
+#   - openscad@snapshot preferred over openscad (stable is outdated 2021.01)
 
 # ============================================
 # Taps
 # ============================================
-tap "homebrew/bundle"
-tap "homebrew/services"
 tap "hashicorp/tap"
 tap "anomalyco/tap"           # opencode CLI
+tap "oven-sh/bun"             # Bun JavaScript runtime
 
 # ============================================
 # Formulae (CLI tools)
@@ -27,11 +27,16 @@ tap "anomalyco/tap"           # opencode CLI
 
 # Core shell / terminal utilities
 brew "atuin"                  # Shell history with sync (replaces zsh_history search)
+brew "bat"                    # Better cat with syntax highlighting
+brew "bat-extras"             # bat integrations (batgrep, batman, etc.)
+brew "carapace"               # Multi-shell multi-command argument completer
 brew "eza"                    # Modern ls replacement (with icons + git status)
 brew "fastfetch"              # System info display (replaces deprecated neofetch)
+brew "fd"                     # Fast find replacement (used by fzf as default command)
 brew "fzf"                    # Fuzzy finder
 brew "starship"               # Cross-shell prompt (replaces OMZ themes)
-brew "zellij"                 # Terminal multiplexer (replaces tmux)
+brew "tmux"                   # Terminal multiplexer (keeping alongside zellij for now)
+brew "zellij"                 # Modern terminal multiplexer
 brew "zoxide"                 # Smart cd with frecency ranking
 
 # ZSH plugins (sourced from Homebrew prefix)
@@ -47,12 +52,19 @@ brew "awscli"                 # AWS command-line interface
 brew "chroma"                 # Syntax highlighting (used by various tools)
 brew "dockutil"               # Dock management via CLI (formula, not cask)
 brew "duti"                   # Set default apps for file types
+brew "fabric-ai"              # AI augmentation framework
+brew "ffmpeg"                 # Audio/video conversion and streaming
+brew "gh"                     # GitHub CLI
+brew "gemini-cli"             # Google Gemini AI command-line interface
 brew "mas"                    # Mac App Store CLI
 brew "mole"                   # SSH tunnel manager (formula, not cask)
-brew "pinentry-mac"           # GPG pinentry dialog for macOS Keychain
 brew "pygments"               # Syntax highlighting library (Python)
 brew "switchaudio-osx"        # CLI audio device switcher
 brew "watch"                  # Run commands periodically
+brew "yt-dlp"                 # Feature-rich audio/video downloader
+
+# JavaScript runtime
+brew "oven-sh/bun/bun"        # Bun — fast JavaScript runtime, bundler, and package manager
 
 # DevOps / Infrastructure
 brew "helm"                   # Kubernetes package manager
@@ -74,81 +86,71 @@ cask "1password"              # Password manager (install early — needed for a
 cask "1password-cli"          # 1Password CLI (op) for chezmoi secrets
 
 # Productivity
-cask "clickup"                # Project management
-cask "notion"                 # Notes and docs
-cask "notion-calendar"        # Notion calendar
-cask "notion-mail"            # Notion mail client
-cask "pronotes"               # Quick notes
 cask "raycast"                # Launcher and productivity tool (replaces Spotlight)
 
 # Browsers
-cask "firefox"                # Firefox browser
+cask "brave-browser"          # Brave privacy browser
 cask "google-chrome"          # Chrome browser
 cask "tor-browser"            # Tor browser for privacy
 
 # Communication
-cask "discord"                # Discord
-cask "signal"                 # Encrypted messaging
+cask "discord"                # Gaming and community chat
 cask "slack"                  # Team communication
 cask "zoom"                   # Video conferencing
 
 # Development
+cask "antigravity"            # AI coding IDE
+cask "claude"                 # Anthropic Claude desktop app
+cask "claude-code"            # Claude Code CLI
+cask "codex"                  # OpenAI Codex agent
 cask "docker"                 # Docker Desktop
-cask "drawio"                 # Diagramming
+cask "gcloud-cli"             # Google Cloud SDK
 cask "ghostty"                # GPU-accelerated terminal emulator
+cask "opencode-desktop"       # opencode desktop client
 cask "orbstack"               # Fast Docker/Linux on Mac (lighter than Docker Desktop)
-cask "postman"                # API testing
-cask "powershell"             # PowerShell (cross-platform)
-cask "sequel-ace"             # MySQL / MariaDB database client
 cask "visual-studio-code"     # Code editor
+cask "yaak"                   # REST, GraphQL and gRPC API client
 
 # Media / content
 cask "handbrake"              # Video transcoder
 cask "kap"                    # Screen recorder (replaces screenshot shortcuts)
 cask "obs"                    # Open Broadcaster Software (streaming/recording)
-cask "subler"                 # MP4 / MKV metadata editor
 cask "vlc"                    # Media player
 
+# AI tools
+cask "chatgpt"                # ChatGPT desktop app
+cask "lm-studio"              # Local LLM runner with GUI
+cask "ollama"                 # Local LLM runner (CLI-focused)
+
 # Utilities
-cask "android-file-transfer"  # Transfer files to/from Android devices
-cask "appcleaner"             # Clean uninstall apps
+cask "appcleaner"             # Thorough app uninstaller
 cask "balenaetcher"           # Flash OS images to USB/SD
 cask "browserosaurus"         # Browser picker (deprecated Aug 2026, keeping for now)
-cask "cyberduck"              # FTP / S3 / cloud storage browser
-cask "dash"                   # Offline API documentation
 cask "disk-inventory-x"       # Disk usage visualizer
 cask "flux"                   # Screen color temperature adjustment
-cask "jordanbaird-ice"        # Menu bar management (replaces Vanilla/Stats)
+cask "handy"                  # Speech-to-text with LLM reformatting
+cask "home-assistant"         # Home Assistant companion app
 cask "keka"                   # Archive utility
 cask "keyboard-cowboy"        # Keyboard shortcut automation
 cask "knockknock"             # Persistent macOS process monitor
-cask "latest"                 # App update checker
 cask "leader-key"             # Leader-key based shortcuts
 cask "lunar"                  # External monitor brightness control
 cask "mactracker"             # Apple hardware database
-cask "mullvadvpn"             # VPN client
-cask "raspberry-pi-imager"    # Raspberry Pi OS flasher
-cask "session-manager-plugin" # AWS SSM Session Manager plugin
+cask "obsidian"               # Knowledge base and note-taking
 cask "shottr"                 # Screenshot tool with annotation
-cask "suspicious-package"     # Inspect .pkg installers before running
+cask "superwhisper"           # Dictation tool with LLM reformatting
+cask "tailscale"              # Mesh VPN (cask preferred over MAS)
 cask "taskexplorer"           # Process/task inspector
-cask "teamviewer"             # Remote desktop
 cask "the-unarchiver"         # Archive extraction
-cask "utm"                    # Virtual machines on Apple Silicon
-cask "wireshark"              # Network protocol analyzer
-
-# AI tools
-cask "anythingllm"            # Local AI document assistant
-cask "chatgpt"                # ChatGPT desktop app
-cask "lm-studio"              # Local LLM runner (was: lmstudio — incorrect token)
-cask "ollama"                 # Local LLM runner (CLI-focused)
 
 # 3D printing / design
-cask "blender"                # 3D creation suite
+cask "bambu-studio"           # Bambu Lab slicer
 cask "eufymake-studio"        # EufyMake / AnkerMake slicer (replaces deprecated ankermake cask)
-cask "openscad"               # Programmatic 3D CAD
+cask "openscad@snapshot"       # Programmatic 3D CAD (snapshot build — stable is outdated 2021)
 cask "orcaslicer"             # Orca Slicer for 3D printing
+cask "prusaslicer"            # PrusaSlicer for 3D printing
 cask "shapr3d"                # 3D CAD for iPad/Mac
+cask "thumbhost3mf"           # Finder thumbnail previews for .3mf files
 
 # Fonts
 cask "font-jetbrains-mono-nerd-font"  # JetBrains Mono with Nerd Font icons
@@ -161,28 +163,32 @@ cask "blockblock"             # Monitors persistence locations
 # Mac App Store Apps
 # ============================================
 # Note: Requires being signed into the Mac App Store before running.
-# Run `mas signin` or sign in via the App Store GUI first.
+# Sign in via the App Store GUI first.
 
 # Safari Extensions
-mas "1Password for Safari",        id: 1569813296
-mas "Auto HD FPS for YouTube",     id: 1546729687
-mas "DuckDuckGo Privacy Essentials",id: 1482920575
-mas "PayPal Honey",                 id: 1472777122
-mas "Raindrop.io",                  id: 1549370672
-mas "Userscripts",                  id: 1463298887
+mas "1Password for Safari",           id: 1569813296
+mas "Auto HD FPS for YouTube",        id: 1546729687
+mas "DuckDuckGo Privacy Essentials",  id: 1482920575
+mas "Hush",                           id: 1544743900   # Cookie/notification banner blocker
+mas "PayPal Honey",                   id: 1472777122
+mas "Raindrop.io",                    id: 1549370672
+mas "The Camelizer",                  id: 1532579087   # Amazon price history tracker
+mas "uBlock Origin Lite",             id: 6745342698   # Ad blocker for Safari
+mas "Userscripts",                    id: 1463298887
+
+# Obsidian extensions
+mas "Actions For Obsidian",           id: 1659667937
+mas "Obsidian Web Clipper",           id: 6720708363
 
 # Productivity apps
-mas "Actions",                      id: 1586435171  # Shortcuts actions
-mas "AudioBookBinder",              id: 413969927
-mas "Data Jar",                     id: 1453273600
-mas "Disk Speed Test",              id: 425264550
-mas "DuckDuckGo",                   id: 663592361   # DuckDuckGo browser
-mas "Exporter",                     id: 1099120373  # Export iMessages
-mas "Just Focus",                   id: 1142151959  # Pomodoro timer
-mas "Microsoft Remote Desktop",     id: 1295203466
-mas "Perplexity",                   id: 6714467650  # AI search
-mas "Presentify",                   id: 1507246666  # Screen annotation
-mas "Tailscale",                    id: 1475387142  # VPN mesh network
-mas "Twitter",                      id: 1482454543
-mas "WireGuard",                    id: 1451685025
-mas "Xcode",                        id: 497799835
+mas "Actions",                        id: 1586435171   # Shortcuts actions
+mas "AudioBookBinder",                id: 413969927
+mas "Data Jar",                       id: 1453273600
+mas "Disk Speed Test",                id: 425264550
+mas "DuckDuckGo",                     id: 663592361    # DuckDuckGo browser
+mas "Exporter",                       id: 1099120373   # Export iMessages
+mas "Just Focus",                     id: 1142151959   # Pomodoro timer
+mas "Microsoft Remote Desktop",       id: 1295203466
+mas "Perplexity",                     id: 6714467650   # AI search
+mas "Raycast Companion",              id: 6738274497
+mas "Xcode",                          id: 497799835

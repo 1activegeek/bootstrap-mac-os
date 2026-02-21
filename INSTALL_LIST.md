@@ -1,7 +1,7 @@
 # Bootstrap macOS v2 — Complete Install List
 
 > Generated from `Brewfile` + `profiles/Brewfile.*`  
-> Verified: 2026-02-18 · macOS Sequoia 15.x · Apple Silicon  
+> Last updated: 2026-02-21 · macOS Sequoia 15.x · Apple Silicon  
 > **ALL profiles** share the base list. Profile additions are called out separately.
 
 ---
@@ -10,17 +10,15 @@
 
 | Tap | Purpose |
 |-----|---------|
-| `homebrew/bundle` | Brewfile support |
-| `homebrew/services` | Service management |
 | `hashicorp/tap` | Terraform (official HashiCorp tap) |
 | `anomalyco/tap` | opencode CLI |
+| `oven-sh/bun` | Bun JavaScript runtime |
 
 **Homelab profile adds:**
 
 | Tap | Purpose |
 |-----|---------|
 | `fluxcd/tap` | Flux CD |
-| `weaveworks/tap` | Weave GitOps |
 | `go-task/tap` | go-task (Taskfile) |
 
 ---
@@ -32,11 +30,16 @@
 | Formula | Description |
 |---------|-------------|
 | `atuin` | Shell history with sync + fuzzy search (replaces Ctrl+R) |
+| `bat` | Better `cat` with syntax highlighting |
+| `bat-extras` | bat integrations: batgrep, batman, batdiff, etc. |
+| `carapace` | Multi-shell multi-command argument completer |
 | `eza` | Modern `ls` replacement with icons and git status |
 | `fastfetch` | System info display (replaces deprecated neofetch) |
+| `fd` | Fast `find` replacement (used by fzf as default command) |
 | `fzf` | Fuzzy finder for files, processes, git branches |
 | `starship` | Cross-shell prompt (replaces Oh My Zsh themes) |
-| `zellij` | Terminal multiplexer (replaces tmux) |
+| `tmux` | Terminal multiplexer (keeping alongside zellij for now) |
+| `zellij` | Modern terminal multiplexer |
 | `zoxide` | Smart `cd` with frecency ranking |
 | `zsh-autosuggestions` | Fish-style inline command suggestions |
 | `zsh-syntax-highlighting` | Live command syntax highlighting |
@@ -54,14 +57,24 @@
 | `age` | Modern file encryption |
 | `awscli` | AWS command-line interface |
 | `chroma` | Syntax highlighting library |
-| `dockutil` | Dock management via CLI |
+| `dockutil` | Dock management via CLI (formula, not cask) |
 | `duti` | Set default applications for file types |
+| `fabric-ai` | AI augmentation framework (fabric) |
+| `ffmpeg` | Audio/video conversion and streaming |
+| `gemini-cli` | Google Gemini AI command-line interface |
+| `gh` | GitHub CLI |
 | `mas` | Mac App Store CLI installer |
-| `mole` | SSH tunnel manager |
-| `pinentry-mac` | GPG pinentry dialog via macOS Keychain |
+| `mole` | SSH tunnel manager (formula, not cask) |
 | `pygments` | Python syntax highlighting library |
 | `switchaudio-osx` | CLI audio device switcher |
 | `watch` | Run commands on a repeating interval |
+| `yt-dlp` | Feature-rich audio/video downloader |
+
+### JavaScript Runtime
+
+| Formula | Description |
+|---------|-------------|
+| `oven-sh/bun/bun` | Bun — fast JavaScript runtime, bundler, and package manager |
 
 ### DevOps & Infrastructure
 
@@ -93,8 +106,6 @@
 | Formula | Description |
 |---------|-------------|
 | `fluxcd/tap/flux` | Flux CD — GitOps continuous delivery operator |
-| `weaveworks/tap/gitops` | Weave GitOps CLI |
-| `crane` | Interact with container image registries |
 | `direnv` | Per-directory environment variable loading |
 | `go-task/tap/go-task` | Taskfile runner (modern make alternative) |
 | `ipcalc` | IP address and subnet calculator |
@@ -102,7 +113,6 @@
 | `kustomize` | Kubernetes configuration customization |
 | `pre-commit` | Git hook framework |
 | `sops` | Secrets OPerationS — config file encryption |
-| `stern` | Multi-pod Kubernetes log tailing |
 | `yamllint` | YAML linter |
 
 ---
@@ -113,25 +123,20 @@
 
 | Cask | App Name | Description |
 |------|----------|-------------|
-| `1password` | 1Password 8 | Password manager |
+| `1password` | 1Password 8 | Password manager (installed early — needed for auth) |
 | `1password-cli` | 1Password CLI (`op`) | CLI for chezmoi secrets integration |
 
 ### Productivity
 
 | Cask | App Name | Description |
 |------|----------|-------------|
-| `clickup` | ClickUp | Project and task management |
-| `notion` | Notion | Notes, wikis, and documents |
-| `notion-calendar` | Notion Calendar | Calendar linked to Notion |
-| `notion-mail` | Notion Mail | Email client linked to Notion |
-| `pronotes` | ProNotes | Quick notes |
 | `raycast` | Raycast | Launcher, automation, and productivity hub |
 
 ### Browsers
 
 | Cask | App Name | Description |
 |------|----------|-------------|
-| `firefox` | Firefox | Mozilla Firefox |
+| `brave-browser` | Brave Browser | Privacy-focused browser |
 | `google-chrome` | Google Chrome | Chrome browser |
 | `tor-browser` | Tor Browser | Privacy-focused Tor network browser |
 
@@ -140,7 +145,6 @@
 | Cask | App Name | Description |
 |------|----------|-------------|
 | `discord` | Discord | Gaming and community chat |
-| `signal` | Signal | End-to-end encrypted messaging |
 | `slack` | Slack | Team messaging and collaboration |
 | `zoom` | Zoom | Video conferencing |
 
@@ -154,74 +158,70 @@
 
 | Cask | App Name | Description |
 |------|----------|-------------|
+| `antigravity` | Antigravity | AI coding IDE |
+| `claude` | Claude | Anthropic Claude desktop app |
+| `claude-code` | Claude Code | Claude Code CLI |
+| `codex` | Codex | OpenAI Codex agent |
 | `docker` | Docker Desktop | Container platform |
-| `drawio` | draw.io | Diagramming tool |
+| `gcloud-cli` | Google Cloud CLI | Google Cloud SDK |
 | `ghostty` | Ghostty | GPU-accelerated terminal emulator |
+| `opencode-desktop` | opencode Desktop | opencode desktop client |
 | `orbstack` | OrbStack | Fast, lightweight Docker and Linux on Mac |
-| `postman` | Postman | API design and testing platform |
-| `powershell` | PowerShell | Cross-platform shell from Microsoft |
-| `sequel-ace` | Sequel Ace | MySQL / MariaDB database client |
 | `visual-studio-code` | Visual Studio Code | Code editor |
+| `yaak` | Yaak | REST, GraphQL and gRPC API client |
 
 ### Media & Content
 
 | Cask | App Name | Description |
 |------|----------|-------------|
 | `handbrake` | HandBrake | Open-source video transcoder |
-| `kap` | Kap | Screen recorder (also replaces Cmd+Shift+3) |
+| `kap` | Kap | Screen recorder |
 | `obs` | OBS Studio | Streaming and screen recording |
-| `subler` | Subler | MP4/MKV metadata editor |
 | `vlc` | VLC | Universal media player |
-
-### Utilities
-
-| Cask | App Name | Description |
-|------|----------|-------------|
-| `android-file-transfer` | Android File Transfer | Transfer files to/from Android devices |
-| `appcleaner` | AppCleaner | Thorough app uninstaller |
-| `balenaetcher` | balenaEtcher | Flash OS images to USB/SD cards |
-| `browserosaurus` | Browserosaurus | Browser picker on link open ⚠️ Deprecated Aug 2026 |
-| `cyberduck` | Cyberduck | FTP, S3, and cloud storage browser |
-| `dash` | Dash | Offline API documentation browser |
-| `disk-inventory-x` | Disk Inventory X | Disk usage treemap visualizer |
-| `flux` | f.lux | Screen color temperature adjustment |
-| `jordanbaird-ice` | Ice | Menu bar item manager (replaces Vanilla/Stats) |
-| `keka` | Keka | Archive utility (zip, rar, 7z, etc.) |
-| `keyboard-cowboy` | Keyboard Cowboy | Keyboard shortcut automation |
-| `knockknock` | KnockKnock | Persistent process and startup item monitor |
-| `latest` | Latest | App update checker |
-| `leader-key` | Leader Key | Leader-key based keyboard shortcut launcher |
-| `lunar` | Lunar | External monitor brightness and color control |
-| `mactracker` | Mactracker | Apple hardware specifications database |
-| `mullvadvpn` | Mullvad VPN | Privacy-focused VPN client |
-| `raspberry-pi-imager` | Raspberry Pi Imager | Flash Raspberry Pi OS to SD cards |
-| `session-manager-plugin` | AWS Session Manager Plugin | AWS SSM Session Manager CLI plugin |
-| `shottr` | Shottr | Screenshot tool with annotation and OCR |
-| `suspicious-package` | Suspicious Package | Inspect .pkg installers before running |
-| `taskexplorer` | TaskExplorer | Process and network activity inspector |
-| `teamviewer` | TeamViewer | Remote desktop and support |
-| `the-unarchiver` | The Unarchiver | Archive extraction (many formats) |
-| `utm` | UTM | Virtual machine manager for Apple Silicon |
-| `wireshark` | Wireshark | Network protocol analyzer |
 
 ### AI Tools
 
 | Cask | App Name | Description |
 |------|----------|-------------|
-| `anythingllm` | AnythingLLM | Local AI document assistant |
 | `chatgpt` | ChatGPT | OpenAI ChatGPT desktop app |
 | `lm-studio` | LM Studio | Run local LLMs with a GUI |
 | `ollama` | Ollama | Run local LLMs via CLI |
+
+### Utilities
+
+| Cask | App Name | Description |
+|------|----------|-------------|
+| `appcleaner` | AppCleaner | Thorough app uninstaller |
+| `balenaetcher` | balenaEtcher | Flash OS images to USB/SD cards |
+| `browserosaurus` | Browserosaurus | Browser picker on link open ⚠️ Deprecated Aug 2026 |
+| `disk-inventory-x` | Disk Inventory X | Disk usage treemap visualizer |
+| `flux` | f.lux | Screen color temperature adjustment |
+| `handy` | Handy | Speech-to-text with LLM reformatting |
+| `home-assistant` | Home Assistant | Home Assistant companion app |
+| `keka` | Keka | Archive utility (zip, rar, 7z, etc.) |
+| `keyboard-cowboy` | Keyboard Cowboy | Keyboard shortcut automation |
+| `knockknock` | KnockKnock | Persistent process and startup item monitor |
+| `leader-key` | Leader Key | Leader-key based keyboard shortcut launcher |
+| `lunar` | Lunar | External monitor brightness and color control |
+| `mactracker` | Mactracker | Apple hardware specifications database |
+| `obsidian` | Obsidian | Knowledge base and note-taking |
+| `shottr` | Shottr | Screenshot tool with annotation and OCR |
+| `superwhisper` | SuperWhisper | Dictation tool with LLM reformatting |
+| `tailscale` | Tailscale | Mesh VPN (cask preferred over MAS) |
+| `taskexplorer` | TaskExplorer | Process and network activity inspector |
+| `the-unarchiver` | The Unarchiver | Archive extraction (many formats) |
 
 ### 3D Printing & Design
 
 | Cask | App Name | Description |
 |------|----------|-------------|
-| `blender` | Blender | 3D creation suite |
+| `bambu-studio` | Bambu Studio | Bambu Lab slicer |
 | `eufymake-studio` | EufyMake Studio | Slicer for AnkerMake/EufyMake printers |
-| `openscad` | OpenSCAD | Programmatic 3D CAD modeler |
+| `openscad@snapshot` | OpenSCAD (Snapshot) | Programmatic 3D CAD modeler (snapshot build — stable is outdated 2021) |
 | `orcaslicer` | OrcaSlicer | 3D printing slicer (Bambu, Prusa, etc.) |
+| `prusaslicer` | PrusaSlicer | PrusaSlicer for 3D printing |
 | `shapr3d` | Shapr3D | Professional 3D CAD for Mac and iPad |
+| `thumbhost3mf` | Thumbhost 3MF | Finder thumbnail previews for .3mf files |
 
 ### Fonts
 
@@ -247,9 +247,19 @@
 | 1Password for Safari | 1569813296 | 1Password browser extension |
 | Auto HD FPS for YouTube | 1546729687 | Force HD quality on YouTube |
 | DuckDuckGo Privacy Essentials | 1482920575 | DuckDuckGo tracker blocking extension |
+| Hush | 1544743900 | Cookie/notification banner blocker |
 | PayPal Honey | 1472777122 | Automatic coupon finder |
 | Raindrop.io | 1549370672 | Bookmark manager |
+| The Camelizer | 1532579087 | Amazon price history tracker |
+| uBlock Origin Lite | 6745342698 | Ad blocker for Safari |
 | Userscripts | 1463298887 | Run custom scripts in Safari |
+
+### Obsidian Extensions
+
+| App | MAS ID | Description |
+|-----|--------|-------------|
+| Actions For Obsidian | 1659667937 | Additional Shortcuts actions for Obsidian |
+| Obsidian Web Clipper | 6720708363 | Clip web content to Obsidian |
 
 ### Productivity & Apps
 
@@ -264,11 +274,14 @@
 | Just Focus | 1142151959 | Pomodoro focus timer |
 | Microsoft Remote Desktop | 1295203466 | RDP client for Windows/Azure |
 | Perplexity | 6714467650 | AI-powered search assistant |
-| Presentify | 1507246666 | Screen annotation during presentations |
-| Tailscale | 1475387142 | Mesh VPN network |
-| Twitter | 1482454543 | Official Twitter/X client |
-| WireGuard | 1451685025 | WireGuard VPN client |
+| Raycast Companion | 6738274497 | Raycast companion app |
 | Xcode | 497799835 | Apple developer tools and simulator |
+
+**Work profile adds:**
+
+| App | MAS ID | Description |
+|-----|--------|-------------|
+| Okta Verify | 490179405 | Work SSO authenticator |
 
 ---
 
@@ -281,9 +294,6 @@ These applications must be downloaded and installed manually:
 | **Enconvo** | [enconvo.com](https://www.enconvo.com) | No Homebrew cask exists |
 | **AnkerSlicer** | [ankerstore.com](https://www.ankerstore.com) | No Homebrew cask exists |
 | **Fusion 360** | [autodesk.com](https://www.autodesk.com/products/fusion-360) | No Homebrew cask (subscription required) |
-| **Dia Browser** | App website | Not widely distributed |
-| **AudiobookBinder** | App Store (MAS ID above) | MAS only, no cask |
-| **Thumbhost 3MF** | App Store | MAS only |
 
 ---
 
@@ -291,11 +301,11 @@ These applications must be downloaded and installed manually:
 
 | Category | Base (All Profiles) | +Work | +Homelab |
 |----------|--------------------:|------:|---------:|
-| Taps | 4 | — | 3 |
-| Formulae | 27 | 1 | 11 |
-| Casks | 52 | 1 | — |
-| MAS Apps | 20 | — | — |
-| **Total packages** | **103** | **+2** | **+14** |
+| Taps | 3 | — | 2 |
+| Formulae | 36 | 1 | 9 |
+| Casks | 50 | 1 | — |
+| MAS Apps | 20 | 1 | — |
+| **Total packages** | **109** | **+3** | **+11** |
 
 ---
 
@@ -308,8 +318,13 @@ These applications must be downloaded and installed manually:
 | `dockutil` | Installed as a **formula**, not a cask. |
 | `mole` | Installed as a **formula**, not a cask. |
 | `eufymake-studio` | Replaces the deprecated `ankermake` cask (discontinued upstream). |
-| `anythingllm` | Token is `anythingllm` (not `anythinglm`). |
-| Audible | **Not** on the Mac App Store (iOS only). Removed from list. |
+| `thumbhost3mf` | Installed as a **cask** (not MAS). Confirmed via `brew info --cask thumbhost3mf`. |
+| `tailscale` | Installed as a **cask** (not MAS). Cask preferred for auto-updates. |
+| `homebrew/bundle` | Built into Homebrew core — no longer needs to be listed as a tap. |
+| `homebrew/services` | Built into Homebrew core — no longer needs to be listed as a tap. |
+| `homebrew/autoupdate` | Configured at runtime by `08-homebrew-autoupdate.sh` — not in Brewfile. |
+| Audible | **Not** on the Mac App Store (iOS only). Not included. |
 | MAS apps | Require being signed into the Mac App Store **before** running `brew bundle`. |
 | LuLu / BlockBlock | Installed last to avoid security permission popups interrupting the rest of setup. |
 | 1Password / CLI | Installed in the **first batch** of casks — required for Phase 2 secrets deployment. |
+| VS Code extensions | Intentionally **not tracked** in Brewfile — VS Code Settings Sync handles this. |

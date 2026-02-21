@@ -6,7 +6,9 @@ cask "microsoft-teams"        # Microsoft Teams (work-specific)
 
 # Development / cloud
 brew "azure-cli"              # Azure CLI
-brew "awscli"                 # AWS CLI (already in base, kept for clarity)
+
+# MAS — Work SSO
+mas "Okta Verify",            id: 490179405   # Work SSO authenticator
 
 # Optional: corporate VPN, SSO tools, etc.
 # cask "cisco-secure-client"  # Cisco AnyConnect
