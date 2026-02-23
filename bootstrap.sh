@@ -147,7 +147,7 @@ echo ""
 echo "  Press Enter when ready, or 'q' + Enter to quit."
 echo ""
 read -rp "  Ready to begin? [Enter / q to quit]: " preflight_input
-if [[ "${preflight_input,,}" == "q" ]]; then
+if [[ "$(echo "$preflight_input" | tr '[:upper:]' '[:lower:]')" == "q" ]]; then
   log_info "Exiting. Re-run ./bootstrap.sh when ready."
   exit 0
 fi
@@ -218,7 +218,7 @@ echo ""
 
 read -rp "  Continue with Phase 2? [Enter / q to quit]: " phase2_input
 
-if [[ "${phase2_input,,}" == "q" ]]; then
+if [[ "$(echo "$phase2_input" | tr '[:upper:]' '[:lower:]')" == "q" ]]; then
   echo ""
   log_info "Pausing after Phase 1."
   log_info "Run './bootstrap.sh --phase2' when 1Password is configured."
