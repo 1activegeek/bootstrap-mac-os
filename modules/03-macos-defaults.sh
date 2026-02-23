@@ -130,11 +130,23 @@ defaults write com.apple.screencapture type -string "png"
 # Disable shadow in screenshots
 defaults write com.apple.screencapture disable-shadow -bool true
 
-# TODO: Disable the default Cmd+Shift+3 shortcut and assign to Kap instead.
-# This requires editing com.apple.symbolichotkeys which is complex.
-# Manual step: System Settings > Keyboard > Keyboard Shortcuts > Screenshots
-# Disable "Save picture of screen as file" (Cmd+Shift+3)
-# Then configure Kap's global shortcut in Kap preferences.
+# Disable built-in screenshot shortcuts so Kap/Shottr can own them.
+# Shortcut IDs:
+#   28 = Cmd+Shift+3  (save screenshot to file)
+#   29 = Cmd+Shift+4  (save selection to file)  + Ctrl variant
+#   30 = Cmd+Ctrl+Shift+3  (copy to clipboard)
+#   31 = Cmd+Ctrl+Shift+4  (copy selection)
+for hotkey_id in 28 29 30 31; do
+  /usr/libexec/PlistBuddy \
+    -c "Set :AppleSymbolicHotKeys:${hotkey_id}:enabled false" \
+    "${HOME}/Library/Preferences/com.apple.symbolichotkeys.plist" 2>/dev/null || \
+  /usr/libexec/PlistBuddy \
+    -c "Add :AppleSymbolicHotKeys:${hotkey_id}:enabled bool false" \
+    "${HOME}/Library/Preferences/com.apple.symbolichotkeys.plist" 2>/dev/null || true
+done
+# Activate the changes (requires reactivateSettings on Sonoma+)
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u 2>/dev/null || true
+log_success "Built-in screenshot shortcuts disabled (Kap/Shottr can now own Cmd+Shift+3/4)"
 
 # ============================================
 # Contacts
@@ -223,7 +235,7 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 # - Catppuccin theme: App-by-app. Ghostty: set in config. Zellij: set in config.
 #   Terminal.app themes require importing a profile.
 # - Kap shortcut: Open Kap > Preferences > Record shortcut: Cmd+Shift+3
-#   (after disabling the system screenshot shortcut manually)
+#   (system shortcuts are now disabled by this script)
 
 # ============================================
 # Restart affected services to apply changes

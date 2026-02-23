@@ -18,7 +18,7 @@
 #   --debug        Enable verbose debug logging
 #
 # Environment variables (useful with --unattended):
-#   MACHINE_PROFILE   personal | work | homelab | minimal  (default: personal)
+#   MACHINE_PROFILE   default | "" — profile overlay (default: default)
 #   NEW_HOSTNAME      desired ComputerName (default: skip)
 #   DOTFILES_REPO     chezmoi dotfiles repo URL
 #   MOD_*             true|false to enable/disable individual modules
@@ -84,7 +84,7 @@ export BOOTSTRAP_DEBUG
 # Configuration defaults
 # (Overridden by interactive menu or env vars in --unattended mode)
 # =============================================================================
-MACHINE_PROFILE="${MACHINE_PROFILE:-personal}"
+MACHINE_PROFILE="${MACHINE_PROFILE:-default}"
 NEW_HOSTNAME="${NEW_HOSTNAME:-}"
 DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/1activegeek/dotfiles.git}"
 
@@ -127,6 +127,33 @@ if [[ "$UNATTENDED" == "false" ]]; then
 fi
 
 # =============================================================================
+# Pre-flight: Required manual steps before installation begins
+# =============================================================================
+echo ""
+echo -e "${BOLD}${YELLOW}══════════════════════════════════════════════${NC}"
+echo -e "${BOLD}${YELLOW}  PRE-INSTALL: Complete these steps first      ${NC}"
+echo -e "${BOLD}${YELLOW}══════════════════════════════════════════════${NC}"
+echo ""
+echo "  Before the bootstrap installs anything, ensure the following"
+echo "  are done — some cannot be automated:"
+echo ""
+echo "  [ ] Sign into the Mac App Store"
+echo "        Open App Store → sign in with your Apple ID"
+echo "        (Required for MAS apps like Xcode, Raycast Companion, etc.)"
+echo ""
+echo "  [ ] Sign into iCloud (if not already)"
+echo "        System Settings → Apple ID"
+echo ""
+echo "  Press Enter when ready, or 'q' + Enter to quit."
+echo ""
+read -rp "  Ready to begin? [Enter / q to quit]: " preflight_input
+if [[ "${preflight_input,,}" == "q" ]]; then
+  log_info "Exiting. Re-run ./bootstrap.sh when ready."
+  exit 0
+fi
+echo ""
+
+# =============================================================================
 # Request sudo and keep alive for the duration of Phase 1
 # =============================================================================
 log_step "Requesting administrator access"
@@ -136,7 +163,7 @@ sudo_keepalive
 # PHASE 1: Core Setup
 # All steps run unattended after the menu.
 # =============================================================================
-log_step "Phase 1: Core Setup  [profile: ${MACHINE_PROFILE}]"
+log_step "Phase 1: Core Setup  [profile overlay: ${MACHINE_PROFILE:-none}]"
 echo ""
 
 preflight_checks

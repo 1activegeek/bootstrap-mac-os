@@ -77,17 +77,21 @@ fi
 # ============================================
 # 5. Profile-Specific Brewfile Overlay
 # ============================================
-local profile_brewfile="${SCRIPT_DIR}/profiles/Brewfile.${MACHINE_PROFILE:-personal}"
-if [[ -f "$profile_brewfile" ]]; then
-  log_info "Installing profile packages (${MACHINE_PROFILE})..."
-  brew bundle --file="$profile_brewfile" --no-lock 2>&1 | \
-    grep -v "^Using " | \
-    while IFS= read -r line; do
-      [[ -n "$line" ]] && log_substep "$line"
-    done
-  log_success "Profile packages installed (${MACHINE_PROFILE})"
+if [[ -n "${MACHINE_PROFILE:-}" ]]; then
+  local profile_brewfile="${SCRIPT_DIR}/profiles/Brewfile.${MACHINE_PROFILE}"
+  if [[ -f "$profile_brewfile" ]]; then
+    log_info "Installing profile overlay (${MACHINE_PROFILE})..."
+    brew bundle --file="$profile_brewfile" --no-lock 2>&1 | \
+      grep -v "^Using " | \
+      while IFS= read -r line; do
+        [[ -n "$line" ]] && log_substep "$line"
+      done
+    log_success "Profile overlay installed (${MACHINE_PROFILE})"
+  else
+    log_warn "Profile Brewfile not found: ${profile_brewfile}"
+  fi
 else
-  log_debug "No profile Brewfile found at: ${profile_brewfile}"
+  log_info "No profile overlay selected — base Brewfile only"
 fi
 
 # ============================================

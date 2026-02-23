@@ -1,9 +1,0 @@
-# profiles/Brewfile.personal - Personal machine additions
-# Layered on top of the base Brewfile for the 'personal' profile.
-# This profile is the default.
-
-# Additional media / creative tools
-# (most are already in the base Brewfile)
-
-# Mac App Store — personal only
-# mas "Ice Cubes",   id: <verify-id>   # Mastodon client

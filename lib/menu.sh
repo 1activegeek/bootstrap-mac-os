@@ -28,24 +28,25 @@ show_banner() {
 # ============================================
 
 select_profile() {
-  echo -e "${BOLD}Machine Profile${NC}"
+  echo -e "${BOLD}Profile Overlay${NC}"
   echo ""
-  echo "  1) personal   Full personal setup (default)"
-  echo "  2) work       Work-focused + personal base"
-  echo "  3) homelab    Kubernetes / infrastructure focus"
-  echo "  4) minimal    Core tools only"
+  echo "  The base Brewfile installs all core packages."
+  echo "  An optional profile overlay (profiles/Brewfile.default) adds:"
+  echo "    - Microsoft Teams, azure-cli, Okta Verify (work)"
+  echo "    - Flux CD, go-task, jq, sops, kustomize, etc. (homelab)"
   echo ""
-  read -rp "  Select profile [1]: " choice
+  read -rp "  Install profile overlay? [Y/n]: " choice
 
-  case "${choice:-1}" in
-    1|personal)  MACHINE_PROFILE="personal"  ;;
-    2|work)      MACHINE_PROFILE="work"      ;;
-    3|homelab)   MACHINE_PROFILE="homelab"   ;;
-    4|minimal)   MACHINE_PROFILE="minimal"   ;;
-    *)           MACHINE_PROFILE="personal"  ;;
+  case "${choice,,}" in
+    n|no)  MACHINE_PROFILE=""        ;;
+    *)     MACHINE_PROFILE="default" ;;
   esac
 
-  log_success "Profile: ${MACHINE_PROFILE}"
+  if [[ -n "$MACHINE_PROFILE" ]]; then
+    log_success "Profile overlay: ${MACHINE_PROFILE}"
+  else
+    log_info "Profile overlay: none (base Brewfile only)"
+  fi
   echo ""
 }
 
@@ -128,7 +129,7 @@ select_modules() {
 confirm_settings() {
   echo -e "${BOLD}${CYAN}Summary${NC}"
   echo "  ─────────────────────────────────────"
-  echo "  Profile  : ${MACHINE_PROFILE}"
+  echo "  Profile  : ${MACHINE_PROFILE:-none (base only)}"
   echo "  Hostname : ${NEW_HOSTNAME:-<unchanged>}"
   echo "  ─────────────────────────────────────"
   echo ""

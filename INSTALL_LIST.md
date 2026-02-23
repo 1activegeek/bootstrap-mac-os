@@ -286,8 +286,6 @@ These applications must be downloaded and installed manually:
 
 | App | Where to Get It | Reason |
 |-----|----------------|--------|
-| **Enconvo** | [enconvo.com](https://www.enconvo.com) | No Homebrew cask exists |
-| **AnkerSlicer** | [ankerstore.com](https://www.ankerstore.com) | No Homebrew cask exists |
 | **Fusion 360** | [autodesk.com](https://www.autodesk.com/products/fusion-360) | No Homebrew cask (subscription required) |
 
 ---

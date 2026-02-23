@@ -2,25 +2,12 @@
 # modules/05-zsh.sh - ZSH configuration setup
 #
 # This module:
-#   1. Warns about Oh My Zsh (but doesn't delete it)
-#   2. Creates ~/.zshrc.d/ directory
-#   3. Sets ZSH as the default shell if needed
+#   1. Creates ~/.zshrc.d/ directory
+#   2. Sets ZSH as the default shell if needed
 #
 # Note: The actual ZSH config files (.zshrc, .zprofile, .zshrc.d/*.zsh,
 # starship.toml) are deployed by the chezmoi module (06-chezmoi.sh).
 # This module just ensures the structure is in place.
-
-# ============================================
-# Oh My Zsh check
-# ============================================
-if [[ -d "${HOME}/.oh-my-zsh" ]]; then
-  log_warn "Oh My Zsh detected at ~/.oh-my-zsh"
-  log_warn "It will NOT be removed automatically."
-  log_warn "Once you've verified the new ZSH config works, remove it with:"
-  log_warn "  uninstall_oh_my_zsh   (built-in OMZ command)"
-  log_warn "  OR: rm -rf ~/.oh-my-zsh"
-  echo ""
-fi
 
 # ============================================
 # Create directory structure

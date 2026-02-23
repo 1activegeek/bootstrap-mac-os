@@ -39,7 +39,6 @@ log_success "Dotfiles (including secrets) applied"
 # ============================================
 log_info "Setting SSH key permissions..."
 
-local ssh_dir="${HOME}/.ssh"
 if [[ -d "$ssh_dir" ]]; then
   chmod 700 "$ssh_dir"
 
@@ -61,14 +60,42 @@ else
 fi
 
 # ============================================
-# id_gitea check
+# id_gitea SSH key from 1Password
 # ============================================
-# This key stays RAW on disk (not managed by chezmoi/1Password)
-# because Obsidian needs to access it without any agent indirection.
-if [[ ! -f "${HOME}/.ssh/id_gitea" ]]; then
-  log_warn "~/.ssh/id_gitea not found."
-  log_warn "This key must be placed manually — it's not in 1Password."
-  log_warn "It's required for Obsidian sync with Gitea."
+# Fetches the private key stored in 1Password and writes it to ~/.ssh/id_gitea.
+# Required for Obsidian sync with the self-hosted Gitea instance.
+log_info "Fetching id_gitea SSH key from 1Password..."
+
+local ssh_dir="${HOME}/.ssh"
+local gitea_key="${ssh_dir}/id_gitea"
+local gitea_pub="${ssh_dir}/id_gitea.pub"
+
+ensure_dir "$ssh_dir"
+chmod 700 "$ssh_dir"
+
+# Fetch private key — adjust the item name/field to match your 1Password vault.
+# The item is expected to be named "id_gitea" with fields "private key" and "public key".
+if op item get "id_gitea" --fields "private key" --reveal 2>/dev/null | \
+    grep -q "BEGIN"; then
+
+  op item get "id_gitea" --fields "private key" --reveal 2>/dev/null \
+    > "$gitea_key"
+  chmod 600 "$gitea_key"
+  log_success "id_gitea private key written to ~/.ssh/id_gitea"
+
+  # Fetch public key if available
+  local pub
+  pub="$(op item get "id_gitea" --fields "public key" --reveal 2>/dev/null || true)"
+  if [[ -n "$pub" ]]; then
+    echo "$pub" > "$gitea_pub"
+    chmod 644 "$gitea_pub"
+    log_success "id_gitea public key written to ~/.ssh/id_gitea.pub"
+  fi
+
+else
+  log_warn "Could not fetch id_gitea from 1Password."
+  log_warn "Ensure a 1Password item named 'id_gitea' exists with a 'private key' field."
+  log_warn "You can add it manually to ~/.ssh/id_gitea and run: chmod 600 ~/.ssh/id_gitea"
 fi
 
 # ============================================
