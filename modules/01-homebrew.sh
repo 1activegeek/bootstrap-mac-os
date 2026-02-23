@@ -2,24 +2,35 @@
 # modules/01-homebrew.sh - Install Homebrew and run brew bundle
 #
 # Steps:
-#   1. Install Xcode Command Line Tools (if missing)
+#   1. Install Xcode Command Line Tools (if missing) — blocks until done
 #   2. Install Homebrew (if missing)
 #   3. Configure Homebrew (analytics off, update)
 #   4. Run brew bundle with the base Brewfile
-#   5. Run profile-specific Brewfile overlay (if present)
-#   6. Run brew cleanup
+#   5. Install full Xcode.app via mas if not present — blocks until done
+#   6. Run profile-specific Brewfile overlay (if present)
+#   7. Run brew cleanup
 
 # ============================================
 # 1. Xcode Command Line Tools
 # ============================================
 if ! xcode-select -p &>/dev/null; then
   log_info "Installing Xcode Command Line Tools..."
-  xcode-select --install
 
-  log_info "Waiting for Xcode CLI tools to finish installing..."
+  # Trigger the GUI installer
+  xcode-select --install 2>/dev/null || true
+
+  log_info "Waiting for Xcode Command Line Tools to finish installing..."
+  log_info "(A system dialog has appeared — click Install to proceed)"
+
+  local spinner='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
+  local i=0
   until xcode-select -p &>/dev/null; do
-    sleep 5
+    printf "\r  ${spinner:$((i % ${#spinner})):1}  Waiting for CLT install..." >&2
+    sleep 2
+    (( i++ )) || true
   done
+  printf "\r  \n" >&2
+
   log_success "Xcode Command Line Tools installed"
 else
   log_success "Xcode Command Line Tools: already installed"
@@ -75,7 +86,37 @@ else
 fi
 
 # ============================================
-# 5. Profile-Specific Brewfile Overlay
+# 5. Full Xcode.app (via mas, installed by Brewfile)
+# ============================================
+if [[ ! -d "/Applications/Xcode.app" ]]; then
+  log_info "Installing Xcode.app from the App Store (this can take 30–60 min)..."
+  log_info "(You must be signed into the App Store — see pre-flight prompt)"
+
+  mas install 497799835 || {
+    log_warn "mas install returned non-zero; Xcode.app may still be downloading in the background"
+  }
+
+  log_info "Waiting for Xcode.app to appear on disk..."
+  local spinner='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
+  local i=0
+  until [[ -d "/Applications/Xcode.app" ]]; do
+    printf "\r  ${spinner:$((i % ${#spinner})):1}  Waiting for Xcode.app..." >&2
+    sleep 5
+    (( i++ )) || true
+  done
+  printf "\r  \n" >&2
+
+  log_info "Accepting Xcode license and running first launch..."
+  sudo xcodebuild -license accept 2>/dev/null || true
+  sudo xcodebuild -runFirstLaunch 2>/dev/null || true
+
+  log_success "Xcode.app installed and configured"
+else
+  log_success "Xcode.app: already installed"
+fi
+
+# ============================================
+# 6. Profile-Specific Brewfile Overlay
 # ============================================
 if [[ -n "${MACHINE_PROFILE:-}" ]]; then
   local profile_brewfile="${SCRIPT_DIR}/profiles/Brewfile.${MACHINE_PROFILE}"
@@ -95,7 +136,7 @@ else
 fi
 
 # ============================================
-# 6. Cleanup
+# 7. Cleanup
 # ============================================
 log_substep "Running brew cleanup"
 brew cleanup --prune=all -q 2>/dev/null || true
