@@ -37,7 +37,7 @@ select_profile() {
   echo ""
   read -rp "  Install profile overlay? [Y/n]: " choice
 
-  case "${choice,,}" in
+  case "$(echo "$choice" | tr '[:upper:]' '[:lower:]')" in
     n|no)  MACHINE_PROFILE=""        ;;
     *)     MACHINE_PROFILE="default" ;;
   esac
@@ -138,7 +138,7 @@ confirm_settings() {
   echo ""
 
   read -rp "  Proceed? [Y/n]: " proceed
-  if [[ "${proceed,,}" == "n" ]]; then
+  if [[ "$(echo "$proceed" | tr '[:upper:]' '[:lower:]')" == "n" ]]; then
     echo ""
     log_info "Aborted."
     exit 0

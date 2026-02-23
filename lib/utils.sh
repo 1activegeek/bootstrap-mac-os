@@ -120,7 +120,7 @@ confirm() {
   local prompt="${1:-Continue?}"
   local response
   read -rp "${prompt} [y/N]: " response
-  [[ "${response,,}" =~ ^(yes|y)$ ]]
+  [[ "$(echo "$response" | tr '[:upper:]' '[:lower:]')" =~ ^(yes|y)$ ]]
 }
 
 # Wait for user to press Enter
