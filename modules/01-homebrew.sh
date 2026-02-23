@@ -63,7 +63,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 local brewfile="${SCRIPT_DIR}/Brewfile"
 if [[ -f "$brewfile" ]]; then
   log_info "Installing packages from Brewfile..."
-  brew bundle --file="$brewfile" --no-lock 2>&1 | \
+  brew bundle --file="$brewfile" 2>&1 | \
     grep -v "^Using " | \
     while IFS= read -r line; do
       [[ -n "$line" ]] && log_substep "$line"
@@ -81,7 +81,7 @@ if [[ -n "${MACHINE_PROFILE:-}" ]]; then
   local profile_brewfile="${SCRIPT_DIR}/profiles/Brewfile.${MACHINE_PROFILE}"
   if [[ -f "$profile_brewfile" ]]; then
     log_info "Installing profile overlay (${MACHINE_PROFILE})..."
-    brew bundle --file="$profile_brewfile" --no-lock 2>&1 | \
+    brew bundle --file="$profile_brewfile" 2>&1 | \
       grep -v "^Using " | \
       while IFS= read -r line; do
         [[ -n "$line" ]] && log_substep "$line"
