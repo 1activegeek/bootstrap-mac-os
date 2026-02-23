@@ -61,16 +61,14 @@ PHASE 2 — unattended
 
 ---
 
-## Machine Profiles
+## Profile Overlay
 
-| Profile    | Description                                      |
-|------------|--------------------------------------------------|
-| `personal` | Full personal setup (default)                   |
-| `work`     | Work tools + personal base (adds Microsoft Teams, Azure CLI) |
-| `homelab`  | K8s/GitOps focus (adds Flux, SOPS, go-task, etc.) |
-| `minimal`  | Core tools only, no K8s/cloud modules            |
+The base `Brewfile` installs all core packages. The interactive menu asks whether to also apply the **default profile overlay** (`profiles/Brewfile.default`), which adds:
 
-Each profile has an optional `profiles/Brewfile.<profile>` overlay on top of the base `Brewfile`.
+- Work: Microsoft Teams, Azure CLI, Okta Verify
+- Homelab: Flux CD, go-task, jq, sops, kustomize, yamllint, pre-commit
+
+Answer **n** at the prompt to run base packages only. To add your own overlay, create `profiles/Brewfile.<name>` and pass `MACHINE_PROFILE=<name>` via `--unattended`.
 
 ---
 
@@ -83,7 +81,7 @@ Each profile has an optional `profiles/Brewfile.<profile>` overlay on top of the
 | Dotfiles | chezmoi | Mackup |
 | Secrets | 1Password via chezmoi templates | — |
 | ZSH prompt | Starship | Oh My Zsh themes |
-| ZSH plugins | 15 modular `~/.zshrc.d/*.zsh` files | Oh My Zsh |
+| ZSH plugins | 16 modular `~/.zshrc.d/*.zsh` files | Oh My Zsh |
 | Shell history | atuin | ZSH built-in history |
 | Directory nav | zoxide | cd |
 | ls | eza | ls |
@@ -111,6 +109,7 @@ Each profile has an optional `profiles/Brewfile.<profile>` overlay on top of the
 | `13-sudo.zsh` | Esc-Esc to prepend sudo |
 | `14-fzf.zsh` | fzf config + fbr/fkill helpers |
 | `15-zoxide.zsh` | zoxide smart cd |
+| `16-carapace.zsh` | carapace multi-shell argument completer |
 
 ---
 
@@ -126,9 +125,15 @@ Each profile has an optional `profiles/Brewfile.<profile>` overlay on top of the
 **Environment variables for `--unattended`:**
 
 ```bash
-MACHINE_PROFILE=work \
+# With default profile overlay (all extras)
+MACHINE_PROFILE=default \
 NEW_HOSTNAME=my-macbook \
 DOTFILES_REPO=https://github.com/you/dotfiles.git \
+./bootstrap.sh --unattended
+
+# Base packages only (no overlay)
+MACHINE_PROFILE="" \
+NEW_HOSTNAME=my-macbook \
 ./bootstrap.sh --unattended
 ```
 
@@ -157,7 +162,7 @@ The `dotfiles/` directory here contains a reference copy of what chezmoi manages
 
 ## Customisation
 
-- **Packages:** Edit `Brewfile` and `profiles/Brewfile.<profile>`
+- **Packages:** Edit `Brewfile` (base) or `profiles/Brewfile.default` (overlay)
 - **macOS defaults:** Edit `modules/03-macos-defaults.sh`
 - **Dock layout:** Edit `modules/04-dock.sh`
 - **ZSH aliases:** Add/edit files in `dotfiles/dot_zshrc.d/`
@@ -183,15 +188,11 @@ eval $(op signin)
 
 These cannot be fully automated:
 
-- Configure Kap shortcut (Cmd+Shift+3) in Kap Preferences
-- Disable screenshot shortcut in System Settings > Keyboard Shortcuts
+- Configure Kap shortcut (Cmd+Shift+3) in Kap Preferences (system screenshot shortcuts are disabled automatically)
 - Set desktop wallpaper folders in System Settings > Wallpaper
 - Set mouse cursor color in System Settings > Accessibility > Display
-- Place `~/.ssh/id_gitea` key (raw, for Obsidian/Gitea sync)
 - Import Raycast settings backup
 - Sign into app-specific accounts (Slack, Discord, etc.)
-- Install [enconvo](https://www.enconvo.com) manually (no Homebrew cask)
-- Install AnkerSlicer manually (no Homebrew cask)
 
 ---
 
