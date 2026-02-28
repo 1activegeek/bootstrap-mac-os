@@ -27,13 +27,21 @@ fi
 #   86400           = update interval in seconds (24 hours)
 #   --upgrade       = also upgrade outdated packages
 #   --cleanup       = run brew cleanup after upgrading
-#   --enable-notification = show macOS notification when done
+#   (no notification flag; keep this quiet/background-only)
 log_info "Configuring Homebrew autoupdate (24-hour interval)..."
 
-brew autoupdate start 86400 --upgrade --cleanup --enable-notification 2>&1 | \
+autoupdate_ok=true
+if ! brew autoupdate start 86400 --upgrade --cleanup 2>&1 | \
   while IFS= read -r line; do
     log_substep "$line"
-  done
+  done; then
+  autoupdate_ok=false
+  log_warn "Homebrew autoupdate setup failed; continuing bootstrap"
+fi
 
-log_success "Homebrew autoupdate configured (runs every 24 hours)"
+if [[ "$autoupdate_ok" == "true" ]]; then
+  log_success "Homebrew autoupdate configured (runs every 24 hours)"
+else
+  log_warn "Homebrew autoupdate is not active; run 'brew autoupdate start 86400 --upgrade --cleanup' later"
+fi
 log_info "Commands: baustart / baukill / baustatus (defined in 04-brew.zsh)"
