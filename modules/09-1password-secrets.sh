@@ -39,6 +39,8 @@ log_success "Dotfiles (including secrets) applied"
 # ============================================
 log_info "Setting SSH key permissions..."
 
+ssh_dir="${HOME}/.ssh"
+
 if [[ -d "$ssh_dir" ]]; then
   chmod 700 "$ssh_dir"
 
@@ -66,9 +68,8 @@ fi
 # Required for Obsidian sync with the self-hosted Gitea instance.
 log_info "Fetching id_gitea SSH key from 1Password..."
 
-local ssh_dir="${HOME}/.ssh"
-local gitea_key="${ssh_dir}/id_gitea"
-local gitea_pub="${ssh_dir}/id_gitea.pub"
+gitea_key="${ssh_dir}/id_gitea"
+gitea_pub="${ssh_dir}/id_gitea.pub"
 
 ensure_dir "$ssh_dir"
 chmod 700 "$ssh_dir"
@@ -84,7 +85,7 @@ if op item get "id_gitea" --fields "private key" --reveal 2>/dev/null | \
   log_success "id_gitea private key written to ~/.ssh/id_gitea"
 
   # Fetch public key if available
-  local pub
+  pub=""
   pub="$(op item get "id_gitea" --fields "public key" --reveal 2>/dev/null || true)"
   if [[ -n "$pub" ]]; then
     echo "$pub" > "$gitea_pub"
@@ -104,18 +105,27 @@ fi
 log_info "Verifying git configuration..."
 
 # Set git user identity if not already configured
-local git_name git_email
+git_name=""
+git_email=""
 git_name="$(git config --global user.name 2>/dev/null || echo '')"
 git_email="$(git config --global user.email 2>/dev/null || echo '')"
 
 if [[ -z "$git_name" ]]; then
-  read -rp "  Git user.name: " git_name
-  git config --global user.name "$git_name"
+  if [[ "${UNATTENDED:-false}" == "true" ]]; then
+    log_warn "Git user.name is not set; skipping prompt in unattended mode"
+  else
+    read -rp "  Git user.name: " git_name
+    [[ -n "$git_name" ]] && git config --global user.name "$git_name"
+  fi
 fi
 
 if [[ -z "$git_email" ]]; then
-  read -rp "  Git user.email: " git_email
-  git config --global user.email "$git_email"
+  if [[ "${UNATTENDED:-false}" == "true" ]]; then
+    log_warn "Git user.email is not set; skipping prompt in unattended mode"
+  else
+    read -rp "  Git user.email: " git_email
+    [[ -n "$git_email" ]] && git config --global user.email "$git_email"
+  fi
 fi
 
 # Configure sensible git defaults
