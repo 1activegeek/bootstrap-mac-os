@@ -5,15 +5,17 @@ Automated macOS setup using pure shell scripts, phased deployment, modular packa
 ## Quick Start
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/1activegeek/bootstrap-mac-os/v2/bootstrap.sh)"
+/bin/bash -c "$(curl -fsSL https://git.thegeekybits.com/shawnmix/bootstrap-mac-os/raw/branch/v2/bootstrap.sh)"
 ```
 
 Or run locally:
 
 ```bash
-git clone https://github.com/1activegeek/bootstrap-mac-os.git ~/.bootstrap
+git clone https://git.thegeekybits.com/shawnmix/bootstrap-mac-os.git ~/.bootstrap
 ~/.bootstrap/bootstrap.sh
 ```
+
+Note: the Gitea repo is currently the canonical source for `v2` testing.
 
 ## Deployment Model (4 Phases)
 
