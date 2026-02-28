@@ -161,13 +161,20 @@ defaults write NSGlobalDomain NSPersonNameDefaultShouldPreferNicknamesPreference
 # ============================================
 log_substep "Safari settings"
 
-# Show the Develop menu
-defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true
-defaults write com.apple.Safari IncludeDevelopMenu              -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-
-# Show full URL in address bar
-defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+# Safari defaults can fail on fresh systems before Safari has initialized its
+# preference container. Continue without failing the full bootstrap.
+if ! defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true; then
+  log_warn "Safari defaults skipped: could not set ShowDevelopMenu"
+fi
+if ! defaults write com.apple.Safari IncludeDevelopMenu -bool true; then
+  log_warn "Safari defaults skipped: could not set IncludeDevelopMenu"
+fi
+if ! defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true; then
+  log_warn "Safari defaults skipped: could not set WebKitDeveloperExtrasEnabledPreferenceKey"
+fi
+if ! defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true; then
+  log_warn "Safari defaults skipped: could not set ShowFullURLInSmartSearchField"
+fi
 
 # ============================================
 # Audio

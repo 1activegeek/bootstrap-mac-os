@@ -109,11 +109,28 @@ check_not_root() {
 # Check macOS App Store sign-in status (required for MAS installs)
 check_mas_signin() {
   if command_exists mas; then
-    if mas account &>/dev/null 2>&1; then
-      log_success "Mac App Store: signed in ($(mas account))"
+    local account_output account_status
+    set +e
+    account_output="$(mas account 2>&1)"
+    account_status=$?
+    set -e
+
+    if [[ "$account_status" -eq 0 ]] && [[ -n "$account_output" ]] && [[ "$account_output" != *"Not signed in"* ]]; then
+      log_success "Mac App Store: signed in (${account_output})"
+      return 0
+    fi
+
+    # Some environments return odd status/output combinations with `mas account`.
+    # Fallback to `mas list` as a practical auth signal.
+    if mas list >/dev/null 2>&1; then
+      log_success "Mac App Store: signed in (validated via mas list)"
       return 0
     else
-      log_warn "Mac App Store: not signed in — MAS apps will likely fail"
+      if [[ -n "$account_output" ]]; then
+        log_warn "Mac App Store: not signed in — ${account_output}"
+      else
+        log_warn "Mac App Store: not signed in — MAS apps will likely fail"
+      fi
       return 1
     fi
   else
