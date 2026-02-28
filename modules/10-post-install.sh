@@ -9,19 +9,34 @@ log_step "Post-install validation"
 # ============================================
 # Tool status check
 # ============================================
-declare -A TOOLS=(
-  ["brew"]="Homebrew"
-  ["chezmoi"]="chezmoi"
-  ["starship"]="Starship"
-  ["atuin"]="Atuin"
-  ["zoxide"]="Zoxide"
-  ["eza"]="eza"
-  ["fzf"]="fzf"
-  ["zellij"]="Zellij"
-  ["op"]="1Password CLI"
-  ["dockutil"]="dockutil"
-  ["fastfetch"]="fastfetch"
-  ["git"]="Git"
+TOOL_COMMANDS=(
+  "brew"
+  "chezmoi"
+  "starship"
+  "atuin"
+  "zoxide"
+  "eza"
+  "fzf"
+  "zellij"
+  "op"
+  "dockutil"
+  "fastfetch"
+  "git"
+)
+
+TOOL_NAMES=(
+  "Homebrew"
+  "chezmoi"
+  "Starship"
+  "Atuin"
+  "Zoxide"
+  "eza"
+  "fzf"
+  "Zellij"
+  "1Password CLI"
+  "dockutil"
+  "fastfetch"
+  "Git"
 )
 
 echo ""
@@ -31,8 +46,9 @@ echo "  ────────────────────────
 pass_count=0
 fail_count=0
 
-for cmd in "${!TOOLS[@]}"; do
-  local name="${TOOLS[$cmd]}"
+for i in "${!TOOL_COMMANDS[@]}"; do
+  cmd="${TOOL_COMMANDS[$i]}"
+  name="${TOOL_NAMES[$i]}"
   if command_exists "$cmd"; then
     printf "  ${GREEN}✓${NC}  %-20s\n" "$name"
     (( pass_count++ ))

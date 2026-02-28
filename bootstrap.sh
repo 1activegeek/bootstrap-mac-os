@@ -1,62 +1,26 @@
 #!/usr/bin/env bash
-# =============================================================================
-# bootstrap.sh - macOS Bootstrap Tool v2
-# =============================================================================
-#
-# Single entry point for setting up a fresh macOS installation.
-# Replaces the previous Ansible-based approach with pure shell scripts.
-#
-# Usage (local):
-#   ./bootstrap.sh [--unattended] [--phase2] [--debug]
-#
-# Usage (fresh machine via curl):
-#   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/1activegeek/bootstrap-mac-os/v2/bootstrap.sh)"
-#
-# Flags:
-#   --unattended   Skip interactive menu; use env vars or built-in defaults
-#   --phase2       Run Phase 2 only (secrets deployment after 1Password setup)
-#   --debug        Enable verbose debug logging
-#
-# Environment variables (useful with --unattended):
-#   MACHINE_PROFILE   default | "" — profile overlay (default: default)
-#   NEW_HOSTNAME      desired ComputerName (default: skip)
-#   DOTFILES_REPO     chezmoi dotfiles repo URL
-#   MOD_*             true|false to enable/disable individual modules
-#
-# =============================================================================
+# macOS Bootstrap Tool v2.1
 
 set -euo pipefail
 
-# =============================================================================
-# Determine SCRIPT_DIR
-# When piped via `curl | bash`, BASH_SOURCE[0] is empty — clone repo first.
-# =============================================================================
 if [[ -n "${BASH_SOURCE[0]:-}" ]] && [[ -f "${BASH_SOURCE[0]}" ]]; then
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 else
-  # Running via curl | bash — clone the repo to ~/.bootstrap first
   BOOTSTRAP_REPO="https://github.com/1activegeek/bootstrap-mac-os.git"
   BOOTSTRAP_DIR="${HOME}/.bootstrap"
 
   echo "[INFO] Cloning bootstrap repo to ${BOOTSTRAP_DIR}..."
-
-  # Ensure git is available (Xcode CLT provides it; trigger install if needed)
-  if ! command -v git &>/dev/null; then
+  if ! command -v git >/dev/null 2>&1; then
     echo "[INFO] Installing Xcode Command Line Tools (required for git)..."
     xcode-select --install
-    until command -v git &>/dev/null; do sleep 5; done
+    until command -v git >/dev/null 2>&1; do sleep 5; done
   fi
 
   rm -rf "${BOOTSTRAP_DIR}"
   git clone -b v2 "${BOOTSTRAP_REPO}" "${BOOTSTRAP_DIR}"
-
-  echo "[INFO] Re-executing bootstrap from ${BOOTSTRAP_DIR}..."
   exec "${BOOTSTRAP_DIR}/bootstrap.sh" "$@"
 fi
 
-# =============================================================================
-# Load shared libraries
-# =============================================================================
 # shellcheck source=lib/utils.sh
 source "${SCRIPT_DIR}/lib/utils.sh"
 # shellcheck source=lib/checks.sh
@@ -64,181 +28,232 @@ source "${SCRIPT_DIR}/lib/checks.sh"
 # shellcheck source=lib/menu.sh
 source "${SCRIPT_DIR}/lib/menu.sh"
 
-# =============================================================================
-# Parse CLI flags
-# =============================================================================
 UNATTENDED=false
-PHASE2_ONLY=false
 BOOTSTRAP_DEBUG="${BOOTSTRAP_DEBUG:-false}"
+BOOTSTRAP_MODE="${BOOTSTRAP_MODE:-fresh}"
+DRY_RUN="${DRY_RUN:-false}"
 
 for arg in "$@"; do
   case "$arg" in
     --unattended) UNATTENDED=true ;;
-    --phase2)     PHASE2_ONLY=true ;;
-    --debug)      BOOTSTRAP_DEBUG=true ;;
+    --phase2) BOOTSTRAP_MODE="phase2" ;;
+    --phase3) BOOTSTRAP_MODE="phase3" ;;
+    --phase4) BOOTSTRAP_MODE="phase4" ;;
+    --update) BOOTSTRAP_MODE="update" ;;
+    --dry-run) DRY_RUN=true ;;
+    --debug) BOOTSTRAP_DEBUG=true ;;
   esac
 done
 export BOOTSTRAP_DEBUG
 
-# =============================================================================
-# Configuration defaults
-# (Overridden by interactive menu or env vars in --unattended mode)
-# =============================================================================
-MACHINE_PROFILE="${MACHINE_PROFILE:-default}"
 NEW_HOSTNAME="${NEW_HOSTNAME:-}"
 DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/1activegeek/dotfiles.git}"
+SELECTED_MODULES="${SELECTED_MODULES:-}"
+SELECTED_PACKAGE_KEYS="${SELECTED_PACKAGE_KEYS:-}"
+INSTALL_SCOPE="${INSTALL_SCOPE:-auto}"
 
-# Module toggles — all enabled by default
-MOD_HOMEBREW="${MOD_HOMEBREW:-true}"
-MOD_MACOS_DEFAULTS="${MOD_MACOS_DEFAULTS:-true}"
-MOD_DOCK="${MOD_DOCK:-true}"
-MOD_ZSH="${MOD_ZSH:-true}"
-MOD_CHEZMOI="${MOD_CHEZMOI:-true}"
-MOD_SYMLINKS="${MOD_SYMLINKS:-true}"
-MOD_AUTOUPDATE="${MOD_AUTOUPDATE:-true}"
+export SCRIPT_DIR NEW_HOSTNAME DOTFILES_REPO SELECTED_MODULES SELECTED_PACKAGE_KEYS INSTALL_SCOPE BOOTSTRAP_MODE DRY_RUN
 
-export SCRIPT_DIR MACHINE_PROFILE NEW_HOSTNAME DOTFILES_REPO
+run_module_or_dry() {
+  local module_name="$1"
+  if [[ "$DRY_RUN" == "true" ]]; then
+    log_info "[dry-run] Would run module: ${module_name}"
+    return 0
+  fi
+  run_module "$module_name"
+}
 
-# =============================================================================
-# --phase2 shortcut: resume secrets deployment after 1Password is configured
-# =============================================================================
-if [[ "$PHASE2_ONLY" == "true" ]]; then
-  log_step "Phase 2: Secrets & Final Configuration"
-  run_module "09-1password-secrets.sh"
-  run_module "10-post-install.sh"
-  log_success "Phase 2 complete!"
-  exit 0
-fi
+show_preinstall_reminder() {
+  echo ""
+  echo -e "${BOLD}${YELLOW}══════════════════════════════════════════════${NC}"
+  echo -e "${BOLD}${YELLOW}  PRE-INSTALL CHECKLIST                        ${NC}"
+  echo -e "${BOLD}${YELLOW}══════════════════════════════════════════════${NC}"
+  echo ""
+  echo "  [ ] Signed into Apple ID"
+  echo "  [ ] Signed into Mac App Store"
+  echo "  [ ] iCloud sync complete (Documents/Desktop)"
+  echo ""
+  read -rp "  Press Enter to continue, or q to quit: " ready_input
+  if [[ "$(echo "$ready_input" | tr '[:upper:]' '[:lower:]')" == "q" ]]; then
+    log_info "Exiting. Re-run when pre-install steps are complete."
+    exit 0
+  fi
+}
 
-# =============================================================================
-# Preflight: basic sanity checks
-# =============================================================================
+phase2_readiness_checkpoint() {
+  echo ""
+  echo -e "${BOLD}${YELLOW}══════════════════════════════════════════════${NC}"
+  echo -e "${BOLD}${YELLOW}  PHASE 2 READINESS CHECK                      ${NC}"
+  echo -e "${BOLD}${YELLOW}══════════════════════════════════════════════${NC}"
+  echo ""
+  echo "  Requirements before Phase 2:"
+  echo "  - 1Password desktop app is signed in"
+  echo "  - 1Password CLI integration is enabled"
+  echo "  - 1Password CLI auth completed (op signin)"
+  echo "  - Mac App Store signed in (recommended)"
+  echo ""
+
+  local op_installed="no"
+  local op_auth="no"
+  local mas_auth="no"
+
+  if check_op_installed >/dev/null 2>&1; then
+    op_installed="yes"
+  fi
+  if check_op_auth >/dev/null 2>&1; then
+    op_auth="yes"
+  fi
+  if check_mas_signin >/dev/null 2>&1; then
+    mas_auth="yes"
+  fi
+
+  printf "  %-28s %s\n" "1Password CLI installed:" "$op_installed"
+  printf "  %-28s %s\n" "1Password CLI authenticated:" "$op_auth"
+  printf "  %-28s %s\n" "Mac App Store signed in:" "$mas_auth"
+  echo ""
+
+  if [[ "$op_auth" != "yes" ]]; then
+    if [[ "$DRY_RUN" == "true" ]]; then
+      log_warn "[dry-run] Phase 2 would block here: 1Password CLI auth required."
+      log_info "[dry-run] Run this on real execution: eval \$(op signin)"
+    else
+      log_error "Phase 2 requires authenticated 1Password CLI."
+      log_info "Run: eval \$(op signin)"
+      return 1
+    fi
+  fi
+
+  if [[ "$mas_auth" != "yes" ]]; then
+    log_warn "App Store is not signed in; MAS installs may fail later."
+  fi
+
+  return 0
+}
+
+run_phase2() {
+  log_step "Phase 2: Core config + secrets"
+
+  [[ -n "${NEW_HOSTNAME:-}" ]] && run_module_or_dry "02-hostname.sh"
+  run_module_or_dry "03-macos-defaults.sh"
+  run_module_or_dry "05-zsh.sh"
+  run_module_or_dry "06-chezmoi.sh"
+  run_module_or_dry "08-homebrew-autoupdate.sh"
+  run_module_or_dry "09-1password-secrets.sh"
+}
+
+run_phase4() {
+  log_step "Phase 4: Final customizations"
+  run_module_or_dry "04-dock.sh"
+  run_module_or_dry "07-symlinks.sh"
+  run_module_or_dry "10-post-install.sh"
+}
+
+run_package_selection() {
+  local scope="$1"
+  INSTALL_SCOPE="$scope"
+  export INSTALL_SCOPE SELECTED_MODULES SELECTED_PACKAGE_KEYS
+  run_module "01-homebrew.sh"
+}
+
 require_macos
 check_not_root
 setup_traps
 
-# =============================================================================
-# Interactive menu (skipped with --unattended)
-# =============================================================================
 if [[ "$UNATTENDED" == "false" ]]; then
   run_menu
-  # run_menu populates: MACHINE_PROFILE, NEW_HOSTNAME, MOD_*
-  export MACHINE_PROFILE NEW_HOSTNAME
 fi
 
-# =============================================================================
-# Pre-flight: Required manual steps before installation begins
-# =============================================================================
-echo ""
-echo -e "${BOLD}${YELLOW}══════════════════════════════════════════════${NC}"
-echo -e "${BOLD}${YELLOW}  PRE-INSTALL: Complete these steps first      ${NC}"
-echo -e "${BOLD}${YELLOW}══════════════════════════════════════════════${NC}"
-echo ""
-echo "  Before the bootstrap installs anything, ensure the following"
-echo "  are done — some cannot be automated:"
-echo ""
-echo "  [ ] Sign into the Mac App Store"
-echo "        Open App Store → sign in with your Apple ID"
-echo "        (Required for MAS apps like Xcode, Raycast Companion, etc.)"
-echo ""
-echo "  [ ] Sign into iCloud (if not already)"
-echo "        System Settings → Apple ID"
-echo ""
-echo "  Press Enter when ready, or 'q' + Enter to quit."
-echo ""
-read -rp "  Ready to begin? [Enter / q to quit]: " preflight_input
-if [[ "$(echo "$preflight_input" | tr '[:upper:]' '[:lower:]')" == "q" ]]; then
-  log_info "Exiting. Re-run ./bootstrap.sh when ready."
-  exit 0
+export BOOTSTRAP_MODE NEW_HOSTNAME SELECTED_MODULES SELECTED_PACKAGE_KEYS
+
+if [[ "$DRY_RUN" == "true" ]]; then
+  log_info "Dry-run mode enabled: no system changes will be made"
+else
+  log_step "Requesting administrator access"
+  sudo_keepalive
 fi
-echo ""
 
-# =============================================================================
-# Request sudo and keep alive for the duration of Phase 1
-# =============================================================================
-log_step "Requesting administrator access"
-sudo_keepalive
+case "$BOOTSTRAP_MODE" in
+  fresh)
+    if [[ "$UNATTENDED" == "false" ]]; then
+      show_preinstall_reminder
+    else
+      log_info "Unattended mode: skipping interactive pre-install reminder"
+    fi
+    preflight_checks
+    SELECTED_MODULES="core"
+    SELECTED_PACKAGE_KEYS=""
+    run_package_selection "selected"
+    [[ -n "${NEW_HOSTNAME:-}" ]] && run_module_or_dry "02-hostname.sh"
 
-# =============================================================================
-# PHASE 1: Core Setup
-# All steps run unattended after the menu.
-# =============================================================================
-log_step "Phase 1: Core Setup  [profile overlay: ${MACHINE_PROFILE:-none}]"
-echo ""
+    echo ""
+    echo -e "${BOLD}${GREEN}==============================${NC}"
+    echo -e "${BOLD}${GREEN}  Phase 1 Complete            ${NC}"
+    echo -e "${BOLD}${GREEN}==============================${NC}"
 
-preflight_checks
+    if phase2_readiness_checkpoint; then
+      if [[ "$UNATTENDED" == "true" ]]; then
+        log_info "Unattended mode: stopping after Phase 1. Run --phase2 separately when ready."
+      else
+        read -rp "  Continue to Phase 2 now? [Y/n]: " continue_phase2
+        if [[ "$(echo "${continue_phase2:-y}" | tr '[:upper:]' '[:lower:]')" != "n" ]]; then
+          run_phase2
+        else
+          log_info "Paused after Phase 1. Re-run with --phase2 when ready."
+        fi
+      fi
+    else
+      log_warn "Phase 2 not started due to unmet requirements."
+    fi
+    ;;
 
-# Homebrew + packages (base Brewfile + profile overlay)
-[[ "$MOD_HOMEBREW" == "true" ]]       && run_module "01-homebrew.sh"
+  phase2)
+    phase2_readiness_checkpoint
+    run_phase2
+    ;;
 
-# Hostname (skipped if NEW_HOSTNAME is empty)
-[[ -n "${NEW_HOSTNAME:-}" ]]          && run_module "02-hostname.sh"
+  phase3)
+    if [[ -z "${SELECTED_MODULES:-}" ]]; then
+      log_warn "No modules selected for Phase 3; nothing to install."
+    else
+      run_package_selection "selected"
+    fi
+    ;;
 
-# macOS system defaults
-[[ "$MOD_MACOS_DEFAULTS" == "true" ]] && run_module "03-macos-defaults.sh"
+  phase4)
+    run_phase4
+    ;;
 
-# Dock layout via dockutil
-[[ "$MOD_DOCK" == "true" ]]           && run_module "04-dock.sh"
+  update)
+    run_package_selection "update"
+    ;;
 
-# ZSH modular config + Starship setup
-[[ "$MOD_ZSH" == "true" ]]            && run_module "05-zsh.sh"
+  install-modules)
+    if [[ -z "${SELECTED_MODULES:-}" ]]; then
+      log_warn "No modules selected; nothing to install."
+    else
+      run_package_selection "selected"
+    fi
+    ;;
 
-# Chezmoi: initialize and deploy non-sensitive dotfiles
-[[ "$MOD_CHEZMOI" == "true" ]]        && run_module "06-chezmoi.sh"
+  install-apps)
+    if [[ -z "${SELECTED_PACKAGE_KEYS:-}" ]]; then
+      log_warn "No individual apps selected; nothing to install."
+    else
+      run_package_selection "selected"
+    fi
+    ;;
 
-# Symlinks (~/projects, ~/.claude)
-[[ "$MOD_SYMLINKS" == "true" ]]       && run_module "07-symlinks.sh"
+  *)
+    log_error "Unknown mode: $BOOTSTRAP_MODE"
+    exit 1
+    ;;
+esac
 
-# Homebrew autoupdate daemon
-[[ "$MOD_AUTOUPDATE" == "true" ]]     && run_module "08-homebrew-autoupdate.sh"
-
-# =============================================================================
-# PAUSE: 1Password sign-in
-# =============================================================================
-echo ""
-echo -e "${BOLD}${GREEN}==============================${NC}"
-echo -e "${BOLD}${GREEN}  Phase 1 Complete!           ${NC}"
-echo -e "${BOLD}${GREEN}==============================${NC}"
-echo ""
-echo -e "${BOLD}${YELLOW}ACTION REQUIRED — Sign into 1Password${NC}"
-echo ""
-echo "  Phase 2 deploys SSH keys and other secrets via chezmoi + 1Password."
-echo "  Before continuing, please complete these steps:"
-echo ""
-echo "  1. Open 1Password and sign in to your account"
-echo "  2. Enable CLI integration:"
-echo "       1Password > Settings > Developer > Enable CLI Integration"
-echo "  3. Authenticate the 1Password CLI:"
-echo "       Run in a new terminal: op signin"
-echo ""
-echo "  When ready, press Enter to run Phase 2 (secrets deployment)."
-echo "  Press 'q' + Enter to quit and run Phase 2 later with:"
-echo "       ./bootstrap.sh --phase2"
-echo ""
-
-read -rp "  Continue with Phase 2? [Enter / q to quit]: " phase2_input
-
-if [[ "$(echo "$phase2_input" | tr '[:upper:]' '[:lower:]')" == "q" ]]; then
-  echo ""
-  log_info "Pausing after Phase 1."
-  log_info "Run './bootstrap.sh --phase2' when 1Password is configured."
+if [[ "$DRY_RUN" != "true" ]]; then
   sudo_stop
-  exit 0
 fi
 
-# =============================================================================
-# PHASE 2: Secrets & Final Configuration
-# =============================================================================
-log_step "Phase 2: Secrets & Final Configuration"
-
-run_module "09-1password-secrets.sh"
-run_module "10-post-install.sh"
-
-sudo_stop
-
 echo ""
 echo -e "${BOLD}${GREEN}======================================${NC}"
-echo -e "${BOLD}${GREEN}  Bootstrap complete!                 ${NC}"
-echo -e "${BOLD}${GREEN}  Open a new terminal to get started. ${NC}"
+echo -e "${BOLD}${GREEN}  Bootstrap action complete           ${NC}"
 echo -e "${BOLD}${GREEN}======================================${NC}"
-echo ""

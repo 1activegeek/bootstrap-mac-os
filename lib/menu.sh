@@ -1,58 +1,50 @@
 #!/usr/bin/env bash
-# lib/menu.sh - Interactive menu system
-#
-# Collects ALL user decisions upfront before any installation begins.
-# Variables set here are used throughout the bootstrap process.
-#
-# Depends on lib/utils.sh being sourced first.
+# lib/menu.sh - Interactive menu system (phase and operation first)
 
-# ============================================
-# Banner
-# ============================================
+# shellcheck source=config/package-catalog.sh
+source "${SCRIPT_DIR}/config/package-catalog.sh"
 
 show_banner() {
   echo ""
   echo -e "${BOLD}${CYAN}"
   echo "  ╔══════════════════════════════════════════════╗"
-  echo "  ║        macOS Bootstrap Tool  v2.0            ║"
+  echo "  ║        macOS Bootstrap Tool  v2.1            ║"
   echo "  ║                                              ║"
-  echo "  ║  Pure shell • brew bundle • chezmoi          ║"
+  echo "  ║  4-phase bootstrap + modular packages        ║"
   echo "  ╚══════════════════════════════════════════════╝"
   echo -e "${NC}"
   echo -e "  ${DIM}$(date '+%Y-%m-%d %H:%M:%S')${NC}"
   echo ""
 }
 
-# ============================================
-# Profile Selection
-# ============================================
-
-select_profile() {
-  echo -e "${BOLD}Profile Overlay${NC}"
+choose_mode() {
+  echo -e "${BOLD}Choose an action${NC}"
   echo ""
-  echo "  The base Brewfile installs all core packages."
-  echo "  An optional profile overlay (profiles/Brewfile.default) adds:"
-  echo "    - Microsoft Teams, azure-cli, Okta Verify (work)"
-  echo "    - Flux CD, go-task, jq, sops, kustomize, etc. (homelab)"
+  echo "  1) Fresh bootstrap (Phase 1 core)   [default]"
+  echo "  2) Run Phase 2 (core config + secrets)"
+  echo "  3) Run Phase 3 (additional modules)"
+  echo "  4) Run Phase 4 (final customizations)"
+  echo "  5) Update current apps"
+  echo "  6) Install modules"
+  echo "  7) Install individual apps"
   echo ""
-  read -rp "  Install profile overlay? [Y/n]: " choice
+  read -rp "  Selection [1-7]: " BOOTSTRAP_MODE_CHOICE
 
-  case "$(echo "$choice" | tr '[:upper:]' '[:lower:]')" in
-    n|no)  MACHINE_PROFILE=""        ;;
-    *)     MACHINE_PROFILE="default" ;;
+  case "${BOOTSTRAP_MODE_CHOICE:-1}" in
+    1) BOOTSTRAP_MODE="fresh" ;;
+    2) BOOTSTRAP_MODE="phase2" ;;
+    3) BOOTSTRAP_MODE="phase3" ;;
+    4) BOOTSTRAP_MODE="phase4" ;;
+    5) BOOTSTRAP_MODE="update" ;;
+    6) BOOTSTRAP_MODE="install-modules" ;;
+    7) BOOTSTRAP_MODE="install-apps" ;;
+    *) BOOTSTRAP_MODE="fresh" ;;
   esac
 
-  if [[ -n "$MACHINE_PROFILE" ]]; then
-    log_success "Profile overlay: ${MACHINE_PROFILE}"
-  else
-    log_info "Profile overlay: none (base Brewfile only)"
-  fi
+  echo ""
+  log_success "Mode selected: ${BOOTSTRAP_MODE}"
   echo ""
 }
-
-# ============================================
-# Hostname
-# ============================================
 
 prompt_hostname() {
   echo -e "${BOLD}Hostname${NC}"
@@ -68,92 +60,193 @@ prompt_hostname() {
   echo ""
 }
 
-# ============================================
-# Module Toggles
-# ============================================
+show_module_preview() {
+  local module_id="$1"
+  local names=""
+  while IFS='|' read -r key module type ref name; do
+    [[ -z "$key" ]] && continue
+    [[ "$module" != "$module_id" ]] && continue
+    if [[ -z "$names" ]]; then
+      names="$name"
+    else
+      names="$names, $name"
+    fi
+  done < <(catalog_module_lines "$module_id")
+  printf '%s\n' "$names"
+}
 
-select_modules() {
-  echo -e "${BOLD}Module Selection${NC} (all enabled by default)"
+select_modules_menu() {
+  local phase_filter="$1"
+  local default_behavior="$2"
+  local selectable_modules=()
+  local idx=1
+
+  echo -e "${BOLD}Module selection${NC}"
   echo ""
 
-  # Defaults
-  MOD_HOMEBREW=true
-  MOD_HOSTNAME=true
-  MOD_MACOS_DEFAULTS=true
-  MOD_DOCK=true
-  MOD_ZSH=true
-  MOD_CHEZMOI=true
-  MOD_SYMLINKS=true
-  MOD_AUTOUPDATE=true
+  while IFS='|' read -r id phase title description; do
+    [[ -z "$id" ]] && continue
+    [[ "$id" == "core" ]] && continue
+    if [[ -n "$phase_filter" ]] && [[ "$phase" != "$phase_filter" ]]; then
+      continue
+    fi
+    selectable_modules+=("$id")
+    local preview
+    preview="$(show_module_preview "$id")"
+    echo "  ${idx}) ${title} (${id})"
+    echo "     ${description}"
+    [[ -n "$preview" ]] && echo "     Apps: ${preview}"
+    echo ""
+    ((idx++))
+  done < <(catalog_modules)
 
-  echo "  [H] Homebrew + packages    : enabled"
-  echo "  [M] macOS system defaults  : enabled"
-  echo "  [D] Dock configuration     : enabled"
-  echo "  [Z] ZSH setup              : enabled"
-  echo "  [C] Chezmoi dotfiles       : enabled"
-  echo "  [S] Symlinks               : enabled"
-  echo "  [A] Homebrew autoupdate    : enabled"
-  echo ""
-  echo "  Type letters to toggle off (e.g. 'MD' disables macOS defaults and Dock),"
-  echo "  or press Enter to accept all defaults:"
-  read -rp "  Toggle: " toggles
+  if [[ ${#selectable_modules[@]} -eq 0 ]]; then
+    log_warn "No selectable modules for this context"
+    return 0
+  fi
 
-  for (( i=0; i<${#toggles}; i++ )); do
-    case "${toggles:$i:1}" in
-      [Hh]) MOD_HOMEBREW=false       ;;
-      [Mm]) MOD_MACOS_DEFAULTS=false ;;
-      [Dd]) MOD_DOCK=false           ;;
-      [Zz]) MOD_ZSH=false            ;;
-      [Cc]) MOD_CHEZMOI=false        ;;
-      [Ss]) MOD_SYMLINKS=false       ;;
-      [Aa]) MOD_AUTOUPDATE=false     ;;
-    esac
+  if [[ "$default_behavior" == "all" ]]; then
+    echo "  Default: all modules selected (enter numbers to disable)"
+  else
+    echo "  Default: no modules selected (enter numbers to enable)"
+  fi
+
+  read -rp "  Module numbers (comma-separated, Enter for default): " module_input
+
+  local chosen_modules=()
+  if [[ "$default_behavior" == "all" ]]; then
+    local disabled=",${module_input// /},"
+    for i in "${!selectable_modules[@]}"; do
+      local num=$((i + 1))
+      if [[ "$disabled" != *",${num},"* ]]; then
+        chosen_modules+=("${selectable_modules[$i]}")
+      fi
+    done
+  else
+    if [[ -n "${module_input// /}" ]]; then
+      IFS=',' read -r -a picks <<< "${module_input// /}"
+      for pick in "${picks[@]}"; do
+        if [[ "$pick" =~ ^[0-9]+$ ]] && (( pick >= 1 && pick <= ${#selectable_modules[@]} )); then
+          chosen_modules+=("${selectable_modules[$((pick - 1))]}")
+        fi
+      done
+    fi
+  fi
+
+  SELECTED_MODULES=""
+  local first=true
+  for module_id in "${chosen_modules[@]}"; do
+    if [[ "$first" == "true" ]]; then
+      SELECTED_MODULES="$module_id"
+      first=false
+    else
+      SELECTED_MODULES+=",$module_id"
+    fi
   done
 
-  echo ""
-  echo "  Final selection:"
-  printf "    %-22s %s\n" "Homebrew:"       "$( $MOD_HOMEBREW       && echo enabled || echo disabled )"
-  printf "    %-22s %s\n" "macOS defaults:" "$( $MOD_MACOS_DEFAULTS && echo enabled || echo disabled )"
-  printf "    %-22s %s\n" "Dock:"           "$( $MOD_DOCK           && echo enabled || echo disabled )"
-  printf "    %-22s %s\n" "ZSH:"            "$( $MOD_ZSH            && echo enabled || echo disabled )"
-  printf "    %-22s %s\n" "Chezmoi:"        "$( $MOD_CHEZMOI        && echo enabled || echo disabled )"
-  printf "    %-22s %s\n" "Symlinks:"       "$( $MOD_SYMLINKS       && echo enabled || echo disabled )"
-  printf "    %-22s %s\n" "Autoupdate:"     "$( $MOD_AUTOUPDATE     && echo enabled || echo disabled )"
+  if [[ -n "$SELECTED_MODULES" ]]; then
+    log_success "Selected modules: $SELECTED_MODULES"
+  else
+    log_info "No modules selected"
+  fi
   echo ""
 }
 
-# ============================================
-# Confirmation
-# ============================================
+select_apps_menu() {
+  local app_keys=()
+  local idx=1
+
+  echo -e "${BOLD}Individual app selection${NC}"
+  echo ""
+  echo "  Default: no apps selected"
+  echo ""
+
+  while IFS='|' read -r key module type ref name; do
+    [[ -z "$key" ]] && continue
+    [[ "$module" == "core" ]] && continue
+    local module_title
+    module_title="$(catalog_module_title "$module")"
+    printf "  %3d) %-28s [%s]\n" "$idx" "$name" "$module_title"
+    app_keys+=("$key")
+    ((idx++))
+  done < <(catalog_packages)
+
+  echo ""
+  read -rp "  App numbers (comma-separated, Enter for none): " app_input
+
+  SELECTED_PACKAGE_KEYS=""
+  if [[ -n "${app_input// /}" ]]; then
+    IFS=',' read -r -a picks <<< "${app_input// /}"
+    local first=true
+    for pick in "${picks[@]}"; do
+      if [[ "$pick" =~ ^[0-9]+$ ]] && (( pick >= 1 && pick <= ${#app_keys[@]} )); then
+        if [[ "$first" == "true" ]]; then
+          SELECTED_PACKAGE_KEYS="${app_keys[$((pick - 1))]}"
+          first=false
+        else
+          SELECTED_PACKAGE_KEYS+=",${app_keys[$((pick - 1))]}"
+        fi
+      fi
+    done
+  fi
+
+  if [[ -n "$SELECTED_PACKAGE_KEYS" ]]; then
+    log_success "Selected apps configured"
+  else
+    log_info "No apps selected"
+  fi
+  echo ""
+}
 
 confirm_settings() {
   echo -e "${BOLD}${CYAN}Summary${NC}"
   echo "  ─────────────────────────────────────"
-  echo "  Profile  : ${MACHINE_PROFILE:-none (base only)}"
-  echo "  Hostname : ${NEW_HOSTNAME:-<unchanged>}"
+  echo "  Mode        : ${BOOTSTRAP_MODE}"
+  echo "  Hostname    : ${NEW_HOSTNAME:-<unchanged>}"
+  echo "  Modules     : ${SELECTED_MODULES:-<none>}"
+  echo "  App picks   : ${SELECTED_PACKAGE_KEYS:-<none>}"
   echo "  ─────────────────────────────────────"
   echo ""
-  echo -e "  ${YELLOW}After collecting settings, the bootstrap will run unattended"
-  echo -e "  until it pauses for 1Password sign-in.${NC}"
-  echo ""
-
   read -rp "  Proceed? [Y/n]: " proceed
   if [[ "$(echo "$proceed" | tr '[:upper:]' '[:lower:]')" == "n" ]]; then
-    echo ""
     log_info "Aborted."
     exit 0
   fi
   echo ""
 }
 
-# ============================================
-# Run the full interactive menu
-# ============================================
-
 run_menu() {
   show_banner
-  select_profile
-  prompt_hostname
-  select_modules
+  choose_mode
+
+  NEW_HOSTNAME="${NEW_HOSTNAME:-}"
+  SELECTED_MODULES="${SELECTED_MODULES:-}"
+  SELECTED_PACKAGE_KEYS="${SELECTED_PACKAGE_KEYS:-}"
+
+  case "$BOOTSTRAP_MODE" in
+    fresh)
+      SELECTED_MODULES="core"
+      prompt_hostname
+      ;;
+    phase2)
+      prompt_hostname
+      ;;
+    phase3)
+      select_modules_menu "phase3" "all"
+      ;;
+    phase4)
+      :
+      ;;
+    update)
+      :
+      ;;
+    install-modules)
+      select_modules_menu "" "none"
+      ;;
+    install-apps)
+      select_apps_menu
+      ;;
+  esac
+
   confirm_settings
 }
