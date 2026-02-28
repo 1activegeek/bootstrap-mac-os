@@ -130,6 +130,62 @@ is_cask_installed() {
   brew list --cask "$ref" >/dev/null 2>&1
 }
 
+cask_candidate_app_paths() {
+  local ref="$1"
+  brew info --cask --json=v2 "$ref" 2>/dev/null | python3 -c '
+import json, sys
+
+def walk(node):
+    if isinstance(node, dict):
+        for v in node.values():
+            walk(v)
+    elif isinstance(node, list):
+        for v in node:
+            walk(v)
+    elif isinstance(node, str) and node.lower().endswith(".app"):
+        print(node)
+
+try:
+    data = json.load(sys.stdin)
+except Exception:
+    sys.exit(0)
+
+for cask in data.get("casks", []):
+    walk(cask.get("artifacts", []))
+'
+}
+
+is_cask_present_anywhere() {
+  local ref="$1"
+  local candidate
+  local expanded_path
+  local base
+
+  if is_cask_installed "$ref"; then
+    return 0
+  fi
+
+  while IFS= read -r candidate; do
+    [[ -z "$candidate" ]] && continue
+    if [[ "$candidate" == "~/"* ]]; then
+      expanded_path="${HOME}/${candidate#~/}"
+      [[ -e "$expanded_path" ]] && return 0
+      continue
+    fi
+
+    if [[ "$candidate" == /* ]]; then
+      [[ -e "$candidate" ]] && return 0
+      continue
+    fi
+
+    base="${candidate##*/}"
+    [[ -e "/Applications/${base}" ]] && return 0
+    [[ -e "${HOME}/Applications/${base}" ]] && return 0
+  done < <(cask_candidate_app_paths "$ref")
+
+  return 1
+}
+
 ensure_mas_cache() {
   [[ -n "$MAS_CACHE" ]] && return 0
   if command_exists mas && mas account >/dev/null 2>&1; then
@@ -154,7 +210,7 @@ install_one_package() {
   local installed=false
   case "$type" in
     brew) is_formula_installed "$ref" && installed=true ;;
-    cask) is_cask_installed "$ref" && installed=true ;;
+    cask) is_cask_present_anywhere "$ref" && installed=true ;;
     mas)  is_mas_installed "$ref" && installed=true ;;
   esac
 
