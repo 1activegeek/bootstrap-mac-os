@@ -6,7 +6,7 @@ set -euo pipefail
 if [[ -n "${BASH_SOURCE[0]:-}" ]] && [[ -f "${BASH_SOURCE[0]}" ]]; then
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 else
-  BOOTSTRAP_REPO="${BOOTSTRAP_REPO:-https://git.thegeekybits.com/shawnmix/bootstrap-mac-os.git}"
+  BOOTSTRAP_REPO="${BOOTSTRAP_REPO:-https://github.com/1activegeek/bootstrap-mac-os.git}"
   BOOTSTRAP_DIR="${HOME}/.bootstrap"
 
   echo "[INFO] Cloning bootstrap repo to ${BOOTSTRAP_DIR}..."
