@@ -86,7 +86,7 @@ collect_selected_package_lines() {
     for package_key in "${package_keys[@]}"; do
       package_key="${package_key// /}"
       [[ -z "$package_key" ]] && continue
-      if package_in_list "$package_key" "${SELECTED_PACKAGE_KEYS_RESOLVED[@]}"; then
+      if package_in_list "$package_key" "${SELECTED_PACKAGE_KEYS_RESOLVED[@]-}"; then
         continue
       fi
 
@@ -110,7 +110,7 @@ collect_selected_package_lines() {
       while IFS= read -r package_line; do
         [[ -z "$package_line" ]] && continue
         package_key="${package_line%%|*}"
-        if package_in_list "$package_key" "${SELECTED_PACKAGE_KEYS_RESOLVED[@]}"; then
+        if package_in_list "$package_key" "${SELECTED_PACKAGE_KEYS_RESOLVED[@]-}"; then
           continue
         fi
         SELECTED_PACKAGE_LINES+=("$package_line")
