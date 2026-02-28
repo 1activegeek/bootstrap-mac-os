@@ -25,32 +25,39 @@ local dotfiles_repo="${DOTFILES_REPO:-https://github.com/1activegeek/dotfiles.gi
 local chezmoi_src="${HOME}/.local/share/chezmoi"
 local dry_run="${DRY_RUN:-false}"
 
-patch_promptstringonce_compat() {
+patch_chezmoi_prompt_compat() {
   local template_file="$1"
   [[ ! -f "$template_file" ]] && return 0
-  if ! grep -q "promptStringOnce" "$template_file"; then
+  if ! grep -Eq "promptStringOnce|promptString" "$template_file"; then
     return 0
   fi
 
-  log_warn "Detected unsupported promptStringOnce in ${template_file}"
+  log_warn "Detected unsupported promptString* in ${template_file}"
   if [[ "$dry_run" == "true" ]]; then
-    log_info "[dry-run] Would patch template to use promptString compatibility mode"
+    log_info "[dry-run] Would patch template to use static compatibility defaults"
     return 0
   fi
 
   python3 - "$template_file" <<'PY'
 from pathlib import Path
-import re
 import sys
 
 path = Path(sys.argv[1])
-text = path.read_text()
-text = re.sub(
-    r'promptStringOnce\s+\.\s+"[^"]+"\s+"([^"]+)"',
-    r'promptString "\1"',
-    text,
-)
-path.write_text(text)
+lines = path.read_text().splitlines()
+out = []
+for line in lines:
+    if "$profile :=" in line and ("promptString" in line or "promptStringOnce" in line):
+        out.append('{{- $profile := "default" -}}')
+        continue
+    if "$name" in line and ("promptString" in line or "promptStringOnce" in line):
+        out.append('{{- $name := "" -}}')
+        continue
+    if "$email" in line and ("promptString" in line or "promptStringOnce" in line):
+        out.append('{{- $email := "" -}}')
+        continue
+    out.append(line)
+
+path.write_text("\n".join(out) + "\n")
 PY
 
   log_success "Patched chezmoi template compatibility: ${template_file}"
@@ -62,19 +69,19 @@ PY
 if [[ ! -d "$chezmoi_src" ]]; then
   log_info "Initialising chezmoi from: ${dotfiles_repo}"
   if ! chezmoi init "${dotfiles_repo}"; then
-    log_warn "chezmoi init failed; attempting promptStringOnce compatibility patch"
-    patch_promptstringonce_compat "${chezmoi_src}/dot_chezmoi.toml.tmpl"
+    log_warn "chezmoi init failed; attempting prompt compatibility patch"
+    patch_chezmoi_prompt_compat "${chezmoi_src}/dot_chezmoi.toml.tmpl"
     if [[ "$dry_run" != "true" ]]; then
       chezmoi init --force "${dotfiles_repo}"
     fi
   fi
-  patch_promptstringonce_compat "${chezmoi_src}/dot_chezmoi.toml.tmpl"
+  patch_chezmoi_prompt_compat "${chezmoi_src}/dot_chezmoi.toml.tmpl"
   log_success "chezmoi initialised"
 else
   log_info "chezmoi already initialised — updating from remote"
-  patch_promptstringonce_compat "${chezmoi_src}/dot_chezmoi.toml.tmpl"
+  patch_chezmoi_prompt_compat "${chezmoi_src}/dot_chezmoi.toml.tmpl"
   chezmoi update --apply=false
-  patch_promptstringonce_compat "${chezmoi_src}/dot_chezmoi.toml.tmpl"
+  patch_chezmoi_prompt_compat "${chezmoi_src}/dot_chezmoi.toml.tmpl"
   log_success "chezmoi source updated"
 fi
 
